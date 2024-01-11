@@ -43,7 +43,7 @@
 		(free robot1)
 		(at_robot robot1 warehouse)
 
-		; supplies
+		; consumable supplies
 		(at_supply valve1 warehouse)
 		(at_supply valve2 warehouse)
 		(at_supply valve3 warehouse)
@@ -52,6 +52,7 @@
 		(at_supply bolt2 warehouse)
 		(at_supply bolt3 warehouse)
 
+		; durable supplies
 		(at_supply tool1 warehouse)
 		(is_durable tool1)
 		(dissociate tool1)
@@ -64,7 +65,7 @@
 	(:goal (and
 		(and
 			(exists (?v - valve) (delivered ?v work_station1))
-			(exists (?b - bolt) (delivered ?b work_station1))		
+			(exists (?b - bolt) (delivered ?b work_station1))
 			(exists (?t - tool) (delivered ?t work_station1))
 		)
 

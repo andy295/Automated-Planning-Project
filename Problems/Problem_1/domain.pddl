@@ -126,7 +126,7 @@
 
 		:effect (and
 			(occupied ?r ?b)
-			(not(free ?r))
+			(not (free ?r))
 			(loaded ?b ?r)
 			(not (unloaded ?b))
 		)
@@ -168,7 +168,7 @@
 		)
 	)
 
-	; ; Empty a box containing a specific supply
+	; Empty a box containing a specific supply
 	(:action empty_box
 		:parameters (?r - robotic_agent ?b - box ?s - supply ?l - location)
 		:precondition (and
@@ -200,7 +200,7 @@
 			(full ?b ?s)
 			(or
 				(and (is_durable ?s) (dissociate ?s))
-				(not (is_durable ?s))	
+				(not (is_durable ?s))
 			)
 		)
 
@@ -241,8 +241,8 @@
 		:effect (and
 			(full ?b ?d)
 			(not (empty ?b))
-			(not (assigned ?s ?ws))
+			(not (assigned ?d ?ws))
 			(dissociate ?d)
 		)
-	)	
+	)
 )
