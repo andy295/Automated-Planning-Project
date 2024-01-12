@@ -2,10 +2,17 @@
 	(:domain industrial_manufacturing)
 
 	(:objects 
-		location1 location2 location3 location4 - location
-		work_station1 work_station2 work_station3 work_station4 work_station5 work_station6 work_station7 - work_station
+		location1 location2 location3 - location
+		location4 location5 location6 - location
 
-		box1 - box	; at this stage of the project one box is enough, because we have just one robot and we assume the action of loading and unloading is instantaneous
+		work_station1 work_station2 work_station3 - work_station
+		work_station4 work_station5 work_station6 - work_station 
+
+		; at this stage of the project one box is enough
+		; because we have just one robot and we assume 
+		;the action of loading and unloading is instantaneous
+		box1 - box
+
 		valve1 valve2 valve3 - valve
 		bolt1 bolt2 bolt3 - bolt
 		tool1 tool2 - tool
@@ -15,59 +22,64 @@
 
 	(:init
 		; locations
-		(adjacent warehouse location1)
 		(adjacent warehouse location2)
-		(adjacent warehouse location3)
-		(adjacent warehouse location4)
 
-		(adjacent location1 warehouse)
+		(adjacent location1 location2)
+		(adjacent location1 location4)
+
 		(adjacent location2 warehouse)
-		(adjacent location3 warehouse)
-		(adjacent location4 warehouse)
+		(adjacent location2 location1)
+		(adjacent location2 location3)
+		(adjacent location2 location5)
+
+		(adjacent location3 location2)
+		(adjacent location3 location6)
+
+		(adjacent location4 location1)
+		(adjacent location4 location5)
+
+		(adjacent location5 location2)
+		(adjacent location5 location4)
+		(adjacent location5 location6)
+
+		(adjacent location6 location3)
+		(adjacent location6 location5)
 
 		; work stations
-		(belong work_station1 location1)
-		(belong work_station2 location1)
-		(belong work_station3 location2)
-		(belong work_station4 location3)
-		(belong work_station5 location3)
-		(belong work_station6 location4)
-		(belong work_station7 location4)
+		(at work_station1 location1)
+		(at work_station2 location1)
+		(at work_station3 location3)
+		(at work_station4 location4)
+		(at work_station5 location6)
+		(at work_station6 location6)
 
 		; boxes
+		(at box1 warehouse)
 		(empty box1)
-		(unloaded box1)
-		(at_box box1 warehouse)
 
 		; robots
+		(at robot1 warehouse)
 		(free robot1)
-		(at_robot robot1 warehouse)
 
-		; consumable supplies
-		(at_supply valve1 warehouse)
-		(at_supply valve2 warehouse)
-		(at_supply valve3 warehouse)
-	
-		(at_supply bolt1 warehouse)
-		(at_supply bolt2 warehouse)
-		(at_supply bolt3 warehouse)
+		; supplies
+		(at valve1 warehouse)
+		(at valve2 warehouse)
+		(at valve3 warehouse)
 
-		; durable supplies
-		(at_supply tool1 warehouse)
-		(is_durable tool1)
-		(dissociate tool1)
+		(at bolt1 warehouse)
+		(at bolt2 warehouse)
+		(at bolt3 warehouse)
 
-		(at_supply tool2 warehouse)
-		(is_durable tool2)
-		(dissociate tool2)
+		(at tool1 warehouse)
+		(at tool2 warehouse)
 	)
 
 	(:goal (and
-		(and
-			(exists (?v - valve) (delivered ?v work_station1))
-			(exists (?b - bolt) (delivered ?b work_station1))
-			(exists (?t - tool) (delivered ?t work_station1))
-		)
+		; (and
+		; 	(exists (?v - valve) (delivered ?v work_station1))
+		; 	(exists (?b - bolt) (delivered ?b work_station1))
+		; 	(exists (?t - tool) (delivered ?t work_station1))
+		; )
 
 		(and
 			(exists (?b - bolt) (delivered ?b work_station5))		
@@ -75,28 +87,20 @@
 		)
 
 		(exists (?b - bolt) (delivered ?b work_station3))
-		(exists (?v - valve) (delivered ?v work_station6))
-		(exists (?t - tool) (delivered ?t work_station7))
-	
-		(forall (?t - tool) 
-			(and 
-				(dissociate ?t)
-			)
-		)
-			
-		(forall (?r - robotic_agent) 
-			(and 
-				(free ?r)
-				(at_robot ?r warehouse)
-			)
-		)
 
-		(forall (?b - box) 
-			(and
-				(empty ?b)
-				(unloaded ?b)
-				(at_box ?b warehouse)
-			)
-		)
+		;(forall (?r - robotic_agent) 
+		;	(and 
+		;		(free ?r)
+		;		(at ?r warehouse)
+		;	)
+		;)
+
+		; (forall (?b - box) 
+		; 	(and
+		; 		(empty ?b)
+		; 		(not (locked ?b))
+		; 		(at ?b warehouse)
+		; 	)
+		; )
 	))
 )
