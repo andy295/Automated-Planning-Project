@@ -2,22 +2,26 @@
 	(:requirements
 		:adl
 		:negative-preconditions
+		:conditional-effects
+		:existential-preconditions
+		:universal-preconditions
+		:derived-predicates
 	)
 
 	(:types
 		location
-		
-		container robotic_agent supply work_station - object 
+		work_station
+
+		container
 		box carrier - container
+		
+		supply
+		valve bolt tool - supply
 
-		small_carrier medium_carrier - carrier
-
-		consumable durable - supply
-
-		valve bolt - consumable
-		tool - durable
-
+		robotic_agent
 		amr drone - robotic_agent
+
+		quantity
 	)
 
 	(:constants
@@ -31,23 +35,54 @@
 		(associated ?r - robotic_agent ?c - carrier)
 		(dissociated ?r - robotic_agent)
 
-		(assigned ?d - durable ?ws - work_station)
-		(unassigned ?d - durable)
-
-		(full ?b - box ?s - supply)
-		(empty ?b - box)
-
 		(occupied ?c - carrier ?b - box)
-		(free ?c - carrier)
 
-		(locked ?o - (either container durable))
-		(unlocked ?o - (either container durable))
+		(filled ?b - box ?s - supply)
 
-		; todo AC boxes on carriers
+		(empty ?o - (either box carrier))
+		(locked ?o - (either container supply))
 
-		(is_durable ?d - durable)
+		(is_small ?o - (either robotic_agent carrier))
+		(is_big ?o - (either robotic_agent carrier))
+
+		(compatible ?r - robotic_agent ?c - carrier)
+
+		(is_full ?c - carrier ?q - quantity)
+		(big_max_quantity ?q - quantity)
+		(small_max_quantity ?q - quantity)
+		(all_min_quantity ?q - quantity)
+
+		(contained ?c - carrier ?q - quantity)
+		(increased_by_1 ?q1 - quantity ?q2 - quantity)
+		(decreased_by_1 ?q1 - quantity ?q2 - quantity)
 
 		(delivered ?s - supply ?ws - work_station)
+	)
+
+	(:derived (compatible ?r - robotic_agent ?c - carrier)
+		(or
+			(and
+				(is_big ?r)
+				(is_big ?c)
+			)
+			(and
+				(is_small ?r)
+				(is_small ?c)
+			)
+		)
+	)
+
+	(:derived (is_full ?c - carrier ?q - quantity)
+		(or
+			(and
+				(is_big ?c)
+				(big_max_quantity ?q)
+			)
+			(and
+				(is_small ?c)
+				(small_max_quantity ?q)
+			)
+		)
 	)
 
 	; Moves a robot between two locations, if it is not already there
@@ -71,15 +106,15 @@
 		:precondition (and
 			(at ?r ?l)
 			(at ?c ?l)
-			(unlocked ?c)
 			(dissociated ?r)
+			(not (locked ?c))
+			(compatible ?r ?c)
 		)
 
 		:effect (and
 			(associated ?r ?c)
 			(not (dissociated ?r))
 			(locked ?c)
-			(not (unlocked ?c))
 			(not (at ?c ?l))
 		)
 	)
@@ -90,13 +125,11 @@
 		:precondition (and
 			(at ?r ?l)
 			(associated ?r ?c)
-			(locked ?c)
 		)
 
 		:effect (and
 			(dissociated ?r)
 			(not (associated ?r ?c))
-			(unlocked ?c)
 			(not (locked ?c))
 			(at ?c ?l)
 		)
@@ -104,42 +137,62 @@
 
 	; Robot picks up a specific unloaded box and places it into the carrier
 	(:action occupy_carrier
-		:parameters (?r - robotic_agent ?c - carrier ?b - box ?l - location)
+		:parameters (?r - robotic_agent ?c - carrier ?b - box ?actual_q ?next_q - quantity ?l - location)
 		:precondition (and
 			(at ?r ?l)
-			(associated ?r ?c)
-			(locked ?c)
-			(free ?c)
 			(at ?b ?l)
-			(unlocked ?b)
+			(associated ?r ?c)
+			(empty ?c)
+			(not (locked ?b))
+			(contained ?c ?actual_q)
+			(increased_by_1 ?actual_q ?next_q)
 		)
 
 		:effect (and
 			(occupied ?c ?b)
-			(not (free ?c))
 			(locked ?b)
-			(not (unlocked ?b))
 			(not (at ?b ?l))
+			(contained ?c ?next_q)
+			(not (contained ?c ?actual_q))
+
+			(when
+				(and 
+					(is_full ?c ?next_q)
+				)
+				(and
+					(not (empty ?c))
+				)
+			)
 		)
 	)
 
 	; Robot puts down the loaded box
-	(:action free_carrier
-		:parameters (?r - robotic_agent ?c - carrier ?b - box ?l - location)
+	(:action empty_carrier
+		:parameters (?r - robotic_agent ?c - carrier ?b - box ?actual_q ?next_q - quantity ?l - location)
 		:precondition (and
 			(at ?r ?l)
 			(associated ?r ?c)
-			(locked ?c)
 			(occupied ?c ?b)
-			(locked ?b)
+			(contained ?c ?actual_q)
+			(decreased_by_1 ?actual_q ?next_q)
 		)
-	
+
 		:effect (and
-			(free ?c)
 			(not (occupied ?c ?b))
-			(unlocked ?b)
 			(not (locked ?b))
 			(at ?b ?l)
+			(contained ?c ?next_q)
+			(not (contained ?c ?actual_q))
+
+			(when
+				(and 
+					(all_min_quantity ?next_q)
+				)
+
+				(and
+					(empty ?c)
+				)
+			)
 		)
 	)
 
@@ -148,18 +201,18 @@
 		:parameters (?r - robotic_agent ?c - carrier ?b - box ?s - supply)
 		:precondition (and
 			(at ?r warehouse)
-			(associated ?r ?c)
-			(locked ?c)
-			(occupied ?c ?b)
-			(locked ?b)
 			(at ?s warehouse)
+			(associated ?r ?c)
+			(occupied ?c ?b)
 			(empty ?b)
+			(not (locked ?s))
 		)
 
 		:effect (and
-			(full ?b ?s)
+			(filled ?b ?s)
 			(not (empty ?b))
 			(not (at ?s warehouse))
+			(locked ?s)
 		)
 	)
 
@@ -169,16 +222,15 @@
 		:precondition (and
 			(at ?r ?l)
 			(associated ?r ?c)
-			(locked ?c)
 			(occupied ?c ?b)
-			(locked ?b)
-			(full ?b ?s)
+			(filled ?b ?s)
 		)	
 
 		:effect (and
 			(empty ?b)
-			(not (full ?b ?s))
+			(not (filled ?b ?s))
 			(at ?s ?l)
+			(not (locked ?s))
 		)
 	)
 
@@ -190,56 +242,16 @@
 			(at ?ws ?l)
 			(at ?r ?l)
 			(associated ?r ?c)
-			(locked ?c)
 			(occupied ?c ?b)
-			(locked ?b)
-			(full ?b ?s)
-			(or
-				(and (is_durable ?s) (unassigned ?s))
-				(not (is_durable ?s))
-			)
+			(filled ?b ?s)
 		)
 
 		:effect (and
 			(delivered ?s ?ws)
 			(empty ?b)
-			(not (full ?b ?s))
+			(not (filled ?b ?s))
 			(at ?s ?l)
-			(when
-				(is_durable ?s)
-				
-				(and 
-					(assigned ?s ?ws)
-					(not (unassigned ?s))
-				)
-			)
-		)
-	)
-
-	; Some specific supplies are durable (or not consumable)
-	; this means that their usage must be shared among the different work stations
-	; beacuse of that we need to dissociate them from the work station that uses them
-	; meaning that the robot can recover the supply from the work station and
-	; bring it back to the warehouse or to another work station
-	(:action release_supply
-		:parameters (?r - robotic_agent ?c - carrier ?b - box ?d - durable ?ws - work_station ?l - location)
-		:precondition (and
-			(at ?ws ?l)
-			(at ?r ?l)
-			(at ?d ?l)
-			(associated ?r ?c)
-			(locked ?c)
-			(occupied ?c ?b)
-			(locked ?b)
-			(empty ?b)
-			(assigned ?d ?ws)
-		)
-
-		:effect (and
-			(full ?b ?d)
-			(not (empty ?b))
-			(not (assigned ?d ?ws))
-			(unassigned ?d)
+			(not (locked ?s))
 		)
 	)
 )

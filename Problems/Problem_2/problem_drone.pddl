@@ -1,0 +1,126 @@
+(define (problem industrial_manufacturing)
+	(:domain industrial_manufacturing)
+
+	(:objects
+		location1 location2 location3 location4 - location
+
+		work_station1 work_station2 work_station3 work_station4 - work_station
+
+		box1 box2 box3 - box
+
+		drone1 - drone
+
+		carrier1 carrier2 - carrier
+
+		valve1 valve2 - valve
+		bolt1 bolt2 - bolt
+		tool1 tool2 - tool
+
+		n0 n1 n2 n3 - quantity
+	)
+
+	(:init
+		; locations
+		(adjacent warehouse location2)
+
+		(adjacent location1 location2)
+
+		(adjacent location2 warehouse)
+		(adjacent location2 location1)
+		(adjacent location2 location3)
+		(adjacent location2 location4)
+
+		(adjacent location3 location2)
+
+		(adjacent location4 location2)
+
+		; work stations
+		(at work_station1 location1)
+		(at work_station2 location3)
+		(at work_station3 location4)
+		(at work_station4 location4)
+
+		; boxes
+		(at box1 warehouse)
+		(empty box1)
+
+		(at box2 warehouse)
+		(empty box2)
+
+		(at box3 warehouse)
+		(empty box3)
+
+		(at box4 warehouse)
+		(empty box4)
+
+		(at box5 warehouse)
+		(empty box5)
+
+		; robots
+		(at drone1 warehouse)
+		(dissociated drone1)
+		(is_small drone1)
+
+		; carriers
+		(at carrier1 warehouse)
+		(empty carrier1)
+		(is_big carrier1)
+		(contained carrier1 n0)
+
+		(at carrier2 warehouse)
+		(empty carrier2)
+		(is_small carrier2)
+		(contained carrier2 n0)
+
+		; supplies
+		(at valve1 warehouse)
+		(at valve2 warehouse)
+
+		(at bolt1 warehouse)
+		(at bolt2 warehouse)
+
+		(at tool1 warehouse)
+		(at tool2 warehouse)
+
+		; relations between quantities
+		(increased_by_1 n0 n1)
+		(increased_by_1 n1 n2)
+		(increased_by_1 n2 n3)
+
+		(decreased_by_1 n1 n0)
+		(decreased_by_1 n2 n1)
+		(decreased_by_1 n3 n2)
+
+		(big_max_quantity n3)
+		(small_max_quantity n2)
+		(all_min_quantity n0)
+	)
+
+	(:goal (and
+		(exists (?v - valve) (delivered ?v work_station1))
+		(exists (?b - bolt) (delivered ?b work_station4))		
+		(exists (?b - bolt) (delivered ?b work_station3))
+
+		(forall (?r - robotic_agent) 
+			(and 
+				(dissociated ?r)
+				(at ?r warehouse)
+			)
+		)
+
+		(forall (?c - carrier) 
+			(and 
+				(empty ?c)
+				(at ?c warehouse)
+			)
+		)
+
+		(forall (?b - box) 
+			(and 
+				(empty ?b)
+				(not (locked ?b))
+				(at ?b warehouse)
+			)
+		)
+	))
+)
