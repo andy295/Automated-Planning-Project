@@ -9,19 +9,13 @@
 	)
 
 	(:types
-		location
-		work_station
-
-		container
-		box carrier - container
+		location work_station container supply robotic_agent quantity - object 
 		
-		supply
+		box carrier - container
+
 		valve bolt tool - supply
 
-		robotic_agent
 		amr drone - robotic_agent
-
-		quantity
 	)
 
 	(:constants
@@ -39,7 +33,7 @@
 
 		(filled ?b - box ?s - supply)
 
-		(empty ?o - (either box carrier))
+		(empty ?c - container)
 		(locked ?o - (either container supply))
 
 		(is_small ?o - (either robotic_agent carrier))
@@ -63,7 +57,7 @@
 		(or
 			(and
 				(is_big ?r)
-				(is_big ?c)
+			(is_big ?c)	
 			)
 			(and
 				(is_small ?r)
@@ -87,11 +81,12 @@
 
 	; Moves a robot between two locations, if it is not already there
 	(:action move_robot
-		:parameters (?r - robotic_agent ?from ?to - location)
+		:parameters (?r - robotic_agent ?c - carrier ?from ?to - location)
 		:precondition (and
 			(not (= ?from ?to))
 			(adjacent ?from ?to)
-			(at ?r ?from) 
+			(at ?r ?from)
+			(associated ?r ?c)
 		)
 
 		:effect (and

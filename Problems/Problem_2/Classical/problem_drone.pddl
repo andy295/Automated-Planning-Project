@@ -50,12 +50,6 @@
 		(at box3 warehouse)
 		(empty box3)
 
-		(at box4 warehouse)
-		(empty box4)
-
-		(at box5 warehouse)
-		(empty box5)
-
 		; robots
 		(at drone1 warehouse)
 		(dissociated drone1)
@@ -98,29 +92,30 @@
 
 	(:goal (and
 		(exists (?v - valve) (delivered ?v work_station1))
-		(exists (?b - bolt) (delivered ?b work_station4))		
+		(exists (?b - bolt) (delivered ?b work_station4))
 		(exists (?b - bolt) (delivered ?b work_station3))
+		(exists (?t - tool) (delivered ?t work_station2))
 
-		(forall (?r - robotic_agent) 
-			(and 
-				(dissociated ?r)
-				(at ?r warehouse)
-			)
-		)
+		; (forall (?r - robotic_agent) 
+		; 	(and 
+		; 		(dissociated ?r)
+		; 		(at ?r warehouse)
+		; 	)
+		; )
 
-		(forall (?c - carrier) 
-			(and 
-				(empty ?c)
-				(at ?c warehouse)
-			)
-		)
+		; (forall (?c - carrier) 
+		; 	(and 
+		; 		(empty ?c)
+		; 		(at ?c warehouse)
+		; 	)
+		; )
 
-		(forall (?b - box) 
-			(and 
-				(empty ?b)
-				(not (locked ?b))
-				(at ?b warehouse)
-			)
-		)
+		; (forall (?b - box) 
+		; 	(and 
+		; 		(empty ?b)
+		; 		(not (locked ?b))
+		; 		(at ?b warehouse)
+		; 	)
+		; )
 	))
 )

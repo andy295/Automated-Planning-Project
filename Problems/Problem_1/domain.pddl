@@ -44,7 +44,7 @@
 		:precondition (and
 			(not (= ?from ?to))
 			(adjacent ?from ?to)
-			(at ?r ?from) 
+			(at ?r ?from)
 		)
 
 		:effect (and
