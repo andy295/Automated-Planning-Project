@@ -127,7 +127,7 @@
 	(:action deliver_supply
 		:parameters (?r - robotic_agent ?b - box ?s - supply ?ws - work_station ?l - location)
 		:precondition (and
-			(not (delivered ?ws ?s))
+			(not (delivered ?s ?ws))
 			(at ?ws ?l)
 			(at ?r ?l)
 			(loaded ?r ?b)
