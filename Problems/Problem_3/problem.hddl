@@ -22,52 +22,27 @@
 	(:htn
 		:parameters ()
 		:subtasks (and
-
-			; working
-			; (task0 (t_move drone1 location3))
-			; (task1 (move drone1 location1))
-
-			; test
-			; (task1 (move drone1 location4))
-			; (task2 (dissociate drone1 carrier2))
-
-			; (task0 (t_occupy drone1 box1))
-			; (task2 (empty drone1 box1))
-			; (task2 (dissociate drone1 carrier2))
-
-			; (task0 (move drone1 location3))
-			; (task1 (move drone1 warehouse))
-			; (task0 (t_associate drone1 carrier2))
-			; (task1 (t_occupy drone1 box1))
-			
-			(task0 (t_fill drone1 box1 valve1))
-			; (task1 (t_empty_box drone1 box1))
-			(task1 (t_empty_carrier drone1 box1))
-
-			; (task1 (t_empty_box drone1 box1))
-
-			; (task0 (t_deliver work_station3 valve1))
+			(task0 (t_deliver_supply valve1 work_station1))
+			(task1 (t_deliver_supply bolt1 work_station3))
+			(task2 (t_deliver_supply tool1 work_station2))
 		)
 		:ordering (and
 			(task0 < task1)
-			; (task1 < task2)
+			(task1 < task2)
 		)
 	)
 
 	(:init
 		; locations
 		(adjacent warehouse location2)
-
 		(adjacent location1 location2)
+		(adjacent location3 location2)
+		(adjacent location4 location2)
 
 		(adjacent location2 warehouse)
 		(adjacent location2 location1)
 		(adjacent location2 location3)
 		(adjacent location2 location4)
-
-		(adjacent location3 location2)
-
-		(adjacent location4 location2)
 
 		; work stations
 		(at work_station1 location1)
