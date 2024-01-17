@@ -68,7 +68,7 @@
 		)
 	)
 
-	(:durative-action attach_cart
+	(:durative-action attach_carrier
 		:parameters (?c - carrier ?r - robotic_agent ?l - location)
 		:duration (= ?duration 1)
 		:condition (and
@@ -91,7 +91,7 @@
 		)
 	)
 
-	(:durative-action detach_cart
+	(:durative-action detach_carrier
 		:parameters(?c - carrier ?r - robotic_agent)
 		:duration (= ?duration 1)
 		:condition(and
@@ -105,11 +105,10 @@
 			(at end (free_from_cart ?r))
 			(at end (free_from_robot ?c))
 			(at end (not (attached ?c ?r)))
-
 		)
 	)
 
-	(:durative-action load_cart
+	(:durative-action load_carrier
 		:parameters(?r - robotic_agent ?c - carrier ?b - box ?l - location)
 		:duration (= ?duration 3)
 		:condition (and
@@ -150,7 +149,6 @@
 			(over all (free ?r)) ;robot is not holding anything
 			(over all (on_cart ?b ?c))
 			(at start (not_in_action ?r))
-
 		)
 
 		:effect(and
@@ -261,7 +259,7 @@
 	)
 
 	; Delivery a specific supply to a specific work station
-	(:durative-action deliver_supply_from_cart
+	(:durative-action deliver_supply
 		:parameters (?r - robotic_agent ?b - box ?s - supply ?ws - work_station ?l - location ?c -carrier)
 		:duration (= ?duration 2)
 		:condition (and
@@ -275,6 +273,7 @@
 			(over all (on_cart ?b ?c))
 			(over all (full ?b ?s))
 		)
+
 		:effect (and
 			(at end (delivered ?s ?ws))
 			(at end (empty ?b))
