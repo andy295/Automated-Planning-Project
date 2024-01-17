@@ -138,13 +138,11 @@
 		:parameters (?r - robotic_agent ?c - carrier ?b - box ?s - supply ?ws - work_station ?l1 - location ?l2 - location)
 		:task (t_deliver_supply ?s ?ws)
 		:subtasks (and
-			; (task0 (t_deliver_supply_method1 ?s ?ws))
-			(task1 (t_move ?r ?l2))
-			(task2 (t_deliver ?s ?ws))
+			(task0 (t_move ?r ?l2))
+			(task1 (t_deliver ?s ?ws))
 		)
 		:ordering (and
-			; (task0 < task1)
-			(task1 < task2)
+			(task0 < task1)
 		)
 	)
 
@@ -164,6 +162,20 @@
 		)
 	)
 
+	(:method m_occupy_fill
+		:parameters(?r - robotic_agent ?b - box ?s - supply ?ws - work_station)
+		:task (t_deliver_supply ?s ?ws)
+		:subtasks (and
+			(task0 (t_occupy ?r ?b))
+			(task1 (t_fill ?r ?b ?s))
+			(task2 (t_deliver_supply ?s ?ws))
+		)
+		:ordering (and
+			(task0 < task1)
+			(task1 < task2)
+		)
+	)
+
 	(:method m_refill_box
 		:parameters(?r - robotic_agent ?c - carrier ?b - box ?s - supply ?ws - work_station ?l - location)
 		:task (t_deliver_supply ?s ?ws)
@@ -177,30 +189,6 @@
 			(task1 < task2)
 		)
 	)
-
-	; (:method m_associate_occupy
-	; 	:parameters(?r - robotic_agent ?c - carrier ?b - box)
-	; 	:task (t_prepare_delivery ?r ?s)
-	; 	:subtasks (and
-	; 		(task0 (t_associate ?r ?c))
-	; 		(task1 (t_occupy ?r ?b))
-	; 	)
-	; 	:ordering (and
-	; 		(task0 < task1)
-	; 	)
-	; )
-
-	; (:method m_occupy_fill
-	; 	:parameters(?r - robotic_agent ?b - box ?s - supply)
-	; 	:task (t_prepare_delivery ?r ?s)
-	; 	:subtasks (and
-	; 		(task0 (t_occupy ?r ?b))
-	; 		(task1 (t_fill ?r ?b ?s))
-	; 	)
-	; 	:ordering (and
-	; 		(task0 < task1)
-	; 	)
-	; )
 
 	(:method m_move
 		:parameters (?r - robotic_agent ?c - carrier ?l1 - location ?l2 - location)

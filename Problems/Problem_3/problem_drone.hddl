@@ -26,10 +26,10 @@
 			(task1 (t_deliver_supply bolt1 work_station3))
 			(task2 (t_deliver_supply tool1 work_station2))
 		)
-		:ordering (and
-			(task0 < task1)
-			(task1 < task2)
-		)
+		; :ordering (and
+		; 	(task0 < task1)
+		; 	(task1 < task2)
+		; )
 	)
 
 	(:init
