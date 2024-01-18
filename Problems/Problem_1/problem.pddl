@@ -21,17 +21,14 @@
 	(:init
 		; locations
 		(adjacent warehouse location2)
-
 		(adjacent location1 location2)
+		(adjacent location3 location2)
+		(adjacent location4 location2)
 
 		(adjacent location2 warehouse)
 		(adjacent location2 location1)
 		(adjacent location2 location3)
 		(adjacent location2 location4)
-
-		(adjacent location3 location2)
-
-		(adjacent location4 location2)
 
 		; work stations
 		(at work_station1 location1)
@@ -59,19 +56,11 @@
 	)
 
 	(:goal (and
-	 	(exists (?v - valve) (delivered ?v work_station1))
 		(exists (?t - tool) (delivered ?t work_station1))
 
-		(exists (?b - bolt) (delivered ?b work_station4))		
+		(exists (?b - bolt) (delivered ?b work_station4))
 		(exists (?t - tool) (delivered ?t work_station4))
 
 		(exists (?b - bolt) (delivered ?b work_station3))
-
-		(forall (?r - robotic_agent) 
-			(and 
-				(free ?r)
-				(at ?r warehouse)
-			)
-		)
 	))
 )

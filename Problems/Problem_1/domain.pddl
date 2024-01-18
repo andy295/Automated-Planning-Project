@@ -8,14 +8,9 @@
 	)
 
 	(:types
-		location
-		work_station
-
-		box
-		supply
-
+		location placeable - object
+		work_station box supply robotic_agent - placeable
 		valve bolt durable tool - supply
-
 		robotic_agent
 	)
 
@@ -25,7 +20,7 @@
 
 	(:predicates
 		(adjacent ?l1 - location ?l2 - location)
-		(at ?o - (either work_station box supply robotic_agent) ?l - location)
+		(at ?p - placeable ?l - location)
 
 		(full ?b - box ?s - supply)
 		(empty ?b - box)
@@ -53,7 +48,7 @@
 		)
 	)
 
-	; Robot picks up a specific unloaded box
+	; Picks up a specific unloaded box
 	(:action Load_robot
 		:parameters (?r - robotic_agent ?b - box ?l - location)
 		:precondition (and
@@ -71,7 +66,7 @@
 		)
 	)
 
-	; Robot puts down the loaded box
+	; Puts down the loaded box
 	(:action free_robot
 		:parameters (?r - robotic_agent ?b - box ?l - location)
 		:precondition (and
@@ -87,7 +82,7 @@
 		)
 	)
 
-	; Fill a box with a specific supply
+	; Fills a box with a specific supply
 	(:action fill_box
 		:parameters (?r - robotic_agent ?b - box ?s - supply)
 		:precondition (and
@@ -106,7 +101,7 @@
 		)
 	)
 
-	; Empty a box containing a specific supply
+	; Empties a box containing a specific supply
 	(:action empty_box
 		:parameters (?r - robotic_agent ?b - box ?s - supply ?l - location)
 		:precondition (and
@@ -123,7 +118,7 @@
 		)
 	)
 
-	; Delivery a specific supply to a specific work station
+	; Deliveries a specific supply to a specific work station
 	(:action deliver_supply
 		:parameters (?r - robotic_agent ?b - box ?s - supply ?ws - work_station ?l - location)
 		:precondition (and
