@@ -2,11 +2,11 @@
 
 ## Commands
 1. Planner: LAMA-First
-	-``lama-first domain.pddl problem.pddl``
+	- ``lama-first domain.pddl problem.pddl``
 
 ## Solution
 
-### Lama-First
+### LAMA-First
 1. (load_robot robot1 box1 warehouse)
 2. (fill_box robot1 box1 tool1)
 3. (move_robot robot1 warehouse location2)

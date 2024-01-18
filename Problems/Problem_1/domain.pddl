@@ -24,7 +24,7 @@
 
 		(full ?b - box ?s - supply)
 		(empty ?b - box)
-		
+
 		(loaded ?r - robotic_agent ?b - box)
 		(free ?r - robotic_agent)
 
@@ -73,7 +73,7 @@
 			(at ?r ?l) 
 			(loaded ?r ?b)
 		)
-	
+
 		:effect (and
 			(free ?r)
 			(not (loaded ?r ?b))
