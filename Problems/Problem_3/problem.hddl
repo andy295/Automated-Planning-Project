@@ -6,9 +6,10 @@
 
 		work_station1 work_station2 work_station3 work_station4 - work_station
 
-		box1 box2 box3 - box
+		box1 box2 box3 box4 box5 - box
 
 		drone1 - drone
+		amr1 - amr
 
 		carrier1 carrier2 - carrier
 
@@ -16,19 +17,21 @@
 		bolt1 bolt2 - bolt
 		tool1 tool2 - tool
 
-		n0 n1 n2 n3 - quantity
+		n0 n1 n2 n3 n4 - quantity
 	)
 
 	(:htn
 		:parameters ()
 		:subtasks (and
 			(task0 (t_deliver_supply valve1 work_station1))
-			(task1 (t_deliver_supply bolt1 work_station3))
-			(task2 (t_deliver_supply tool1 work_station2))
+			(task1 (t_deliver_supply tool1 work_station1))
+			(task2 (t_deliver_supply bolt1 work_station3))
+			(task3 (t_deliver_supply tool2 work_station4))
 		)
 		; :ordering (and
 		; 	(task0 < task1)
 		; 	(task1 < task2)
+		; 	(task2 < task3)
 		; )
 	)
 
@@ -60,10 +63,20 @@
 		(at box3 warehouse)
 		(empty box3)
 
+		(at box4 warehouse)
+		(empty box4)
+
+		(at box5 warehouse)
+		(empty box5)
+
 		; robots
+		(at amr1 warehouse)
+		(detached amr1)
+		(is_big amr1)
+
 		(at drone1 warehouse)
-		(dissociated drone1)
-		(is_small drone1)
+		(detached drone1)
+		(is_big drone1)
 
 		; carriers
 		(at carrier1 warehouse)
@@ -90,12 +103,14 @@
 		(increased_by_1 n0 n1)
 		(increased_by_1 n1 n2)
 		(increased_by_1 n2 n3)
+		(increased_by_1 n3 n4)
 
 		(decreased_by_1 n1 n0)
 		(decreased_by_1 n2 n1)
 		(decreased_by_1 n3 n2)
+		(decreased_by_1 n4 n3)
 
-		(big_max_quantity n3)
+		(big_max_quantity n4)
 		(small_max_quantity n2)
 		(all_min_quantity n0)
 	)

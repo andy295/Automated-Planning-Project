@@ -12,15 +12,10 @@
 
 	(:types
 		location quantity placeable - object
-
 		work_station resizable supply - placeable
-
 		valve bolt tool - supply
-
 		robotic_agent container - resizable
-
 		box carrier - container
-
 		amr drone - robotic_agent
 	)
 
@@ -32,10 +27,10 @@
 		(adjacent ?l1 - location ?l2 - location)
 		(at ?p - placeable ?l - location)
 
-		(associated ?r - robotic_agent ?c - carrier)
-		(dissociated ?r - robotic_agent)
+		(attached ?r - robotic_agent ?c - carrier)
+		(detached ?r - robotic_agent)
 
-		(occupied ?c - carrier ?b - box)
+		(loaded ?c - carrier ?b - box)
 
 		(filled ?b - box ?s - supply)
 
@@ -71,37 +66,25 @@
 		:effect ()
 	)
 
-	(:task t_deliver_supply_method1
-		:parameters (?s - supply ?ws - work_station)
-		:precondition ()
-		:effect ()
-	)
-
-	(:task t_deliver_supply_method2
-		:parameters (?s - supply ?ws - work_station)
-		:precondition ()
-		:effect ()
-	)
-
 	(:task t_move
 		:parameters (?r - robotic_agent ?l - location)
 		:precondition ()
 		:effect ()
 	)
 
-	(:task t_associate
+	(:task t_attach
 		:parameters(?r - robotic_agent ?c - carrier)
 		:precondition()
 		:effect()
 	)
 
-	(:task t_dissociate
+	(:task t_detach
 		:parameters(?r - robotic_agent ?c - carrier)
 		:precondition()
 		:effect()
 	)
 
-	(:task t_occupy
+	(:task t_load
 		:parameters(?r - robotic_agent ?b - box)
 		:precondition()
 		:effect()
@@ -146,12 +129,12 @@
 		)
 	)
 
-	(:method m_associate_occupy
+	(:method m_attach_load
 		:parameters(?r - robotic_agent ?c - carrier ?b - box ?s - supply ?ws - work_station)
 		:task (t_deliver_supply ?s ?ws)
 		:subtasks (and
-			(task0 (t_associate ?r ?c))
-			(task1 (t_occupy ?r ?b))
+			(task0 (t_attach ?r ?c))
+			(task1 (t_load ?r ?b))
 			(task2 (t_fill ?r ?b ?s))
 			(task3 (t_deliver_supply ?s ?ws))
 		)
@@ -162,11 +145,11 @@
 		)
 	)
 
-	(:method m_occupy_fill
+	(:method m_load_fill
 		:parameters(?r - robotic_agent ?b - box ?s - supply ?ws - work_station)
 		:task (t_deliver_supply ?s ?ws)
 		:subtasks (and
-			(task0 (t_occupy ?r ?b))
+			(task0 (t_load ?r ?b))
 			(task1 (t_fill ?r ?b ?s))
 			(task2 (t_deliver_supply ?s ?ws))
 		)
@@ -218,27 +201,27 @@
 		)
 	)
 
-	(:method m_associate
+	(:method m_attach
 		:parameters(?r - robotic_agent ?c - carrier ?l - location)
-		:task (t_associate ?r ?c)
+		:task (t_attach ?r ?c)
 		:subtasks (and
-			(task0 (associate_carrier ?r ?c ?l))
+			(task0 (attach_carrier ?r ?c ?l))
 		)
 	)
 
-	(:method m_dissociate
+	(:method m_detach
 		:parameters(?r - robotic_agent ?c - carrier ?l - location)
-		:task (t_dissociate ?r ?c)
+		:task (t_detach ?r ?c)
 		:subtasks (and 
-			(task0 (dissociate_carrier ?r ?c ?l))
+			(task0 (detach_carrier ?r ?c ?l))
 		)
 	)
 
-	(:method m_occupy
+	(:method m_load
 		:parameters(?r - robotic_agent ?c - carrier ?b - box ?actual_q -quantity ?next_q - quantity ?l - location)
-		:task (t_occupy ?r ?b)
+		:task (t_load ?r ?b)
 		:subtasks (and
-			(task0 (occupy_carrier ?r ?c ?b ?actual_q ?next_q ?l))
+			(task0 (load_carrier ?r ?c ?b ?actual_q ?next_q ?l))
 		)
 	)
 	
@@ -268,14 +251,14 @@
 
 	; ############################# ACTIONS #############################
 
-    ; Moves a robot between two locations, if it is not already there
+	; Moves a robot between two locations, if it is not already there
 	(:action move_robot
 		:parameters (?r - robotic_agent ?c - carrier ?from - location ?to - location)
 		:precondition (and
 			(not (= ?from ?to))
 			(adjacent ?from ?to)
 			(at ?r ?from)
-			(associated ?r ?c)
+			(attached ?r ?c)
 		)
 
 		:effect (and
@@ -290,100 +273,65 @@
 		:precondition
 			(and
 				(at ?r ?l2)
-				(associated ?r ?c)
+				(attached ?r ?c)
 			)
 		:effect ()
 	)
 
-	; Associate a carrier to a robot
-	(:action associate_carrier
+	; Attaches a carrier to a robot
+	(:action attach_carrier
 		:parameters (?r - robotic_agent ?c - carrier ?l - location)
 		:precondition (and
 			(at ?r ?l)
 			(at ?c ?l)
-			(dissociated ?r)
+			(detached ?r)
 			(not (locked_container ?c))
 
 			; (compatible ?r ?c) - compatibility check
 			(or
+				(and 
+					; we assume big robot can hold big and small carriers
+					; more conditions can be added here to change the assumption
+					(is_big ?r)
+				)
 				(and
 					(is_small ?r)
 					(is_small ?c)
-				)
-				(and 
-					(is_big ?r)
 				)
 			)
 		)
 
 		:effect (and
-			(associated ?r ?c)
-			(not (dissociated ?r))
+			(attached ?r ?c)
+			(not (detached ?r))
 			(locked_container ?c)
 			(not (at ?c ?l))
 		)
 	)
 
-	; Dissociate a carrier from a robot
-	(:action dissociate_carrier
+	; Detaches a carrier from a robot
+	(:action detach_carrier
 		:parameters (?r - robotic_agent ?c - carrier ?l - location)
 		:precondition (and
 			(at ?r ?l)
-			(associated ?r ?c)
+			(attached ?r ?c)
 		)
 
 		:effect (and
-			(dissociated ?r)
-			(not (associated ?r ?c))
+			(detached ?r)
+			(not (attached ?r ?c))
 			(not (locked_container ?c))
 			(at ?c ?l)
 		)
 	)
 
-	; Robot puts down the loaded box
-	(:action empty_carrier
-		:parameters (?r - robotic_agent ?c - carrier ?b - box ?actual_q ?next_q - quantity ?l - location)
-		:precondition (and
-			(at ?r ?l)
-			(associated ?r ?c)
-			(occupied ?c ?b)
-			(contained ?c ?actual_q)
-			(decreased_by_1 ?actual_q ?next_q)
-		)
-
-		:effect (and
-			(not (occupied ?c ?b))
-			(not (locked_container ?b))
-			(at ?b ?l)
-			(contained ?c ?next_q)
-			(not (contained ?c ?actual_q))
-
-			(when
-				(or
-					(and
-						(is_big ?c)
-						(big_max_quantity ?next_q)
-					)
-					(and
-						(is_small ?c)
-						(small_max_quantity ?next_q)
-					)
-				)
-
-				(and
-					(empty ?c)
-				)
-			)
-		)
-	)
-
-	; Robot picks up a specific unloaded box and places it into the carrier
-	(:action occupy_carrier
+	; Picks up a specific unloaded box and places it into the carrier
+	(:action load_carrier
 		:parameters (?r - robotic_agent ?c - carrier ?b - box ?actual_q ?next_q - quantity ?l - location)
 		:precondition (and
 			(at ?r ?l)
 			(at ?b ?l)
-			(associated ?r ?c)
+			(attached ?r ?c)
 			(empty ?c)
 			(not (locked_container ?b))
 			(contained ?c ?actual_q)
@@ -391,7 +339,7 @@
 		)
 
 		:effect (and
-			(occupied ?c ?b)
+			(loaded ?c ?b)
 			(locked_container ?b)
 			(not (at ?b ?l))
 			(contained ?c ?next_q)
@@ -416,14 +364,51 @@
 		)
 	)
 
-	; Fill a box with a specific supply
+	; Puts down the loaded box
+	(:action empty_carrier
+		:parameters (?r - robotic_agent ?c - carrier ?b - box ?actual_q ?next_q - quantity ?l - location)
+		:precondition (and
+			(at ?r ?l)
+			(attached ?r ?c)
+			(loaded ?c ?b)
+			(contained ?c ?actual_q)
+			(decreased_by_1 ?actual_q ?next_q)
+		)
+
+		:effect (and
+			(not (loaded ?c ?b))
+			(not (locked_container ?b))
+			(at ?b ?l)
+			(contained ?c ?next_q)
+			(not (contained ?c ?actual_q))
+
+			(when
+				(or
+					(and
+						(is_big ?c)
+						(big_max_quantity ?next_q)
+					)
+					(and
+						(is_small ?c)
+						(small_max_quantity ?next_q)
+					)
+				)
+
+				(and
+					(empty ?c)
+				)
+			)
+		)
+	)
+
+	; Fills a box with a specific supply
 	(:action fill_box
 		:parameters (?r - robotic_agent ?c - carrier ?b - box ?s - supply ?l - location)
 		:precondition (and
 			(at ?r ?l)
 			(at ?s ?l)
-			(associated ?r ?c)
-			(occupied ?c ?b)
+			(attached ?r ?c)
+			(loaded ?c ?b)
 			(empty ?b)
 			(not (locked_supply ?s))
 		)
@@ -436,13 +421,13 @@
 		)
 	)
 
-	; Empty a box containing a specific supply
+	; Empties a box containing a specific supply
 	(:action empty_box
 		:parameters (?r - robotic_agent ?c - carrier ?b - box ?s - supply ?l - location)
 		:precondition (and
 			(at ?r ?l)
-			(associated ?r ?c)
-			(occupied ?c ?b)
+			(attached ?r ?c)
+			(loaded ?c ?b)
 			(filled ?b ?s)
 		)
 
@@ -454,15 +439,15 @@
 		)
 	)
 
-	; Delivery a specific supply to a specific work station
+	; Deliveries a specific supply to a specific work station
 	(:action deliver_supply
 		:parameters (?r - robotic_agent ?c - carrier ?b - box ?s - supply ?ws - work_station ?l - location)
 		:precondition (and
 			(not (delivered ?s ?ws))
 			(at ?ws ?l)
 			(at ?r ?l)
-			(associated ?r ?c)
-			(occupied ?c ?b)
+			(attached ?r ?c)
+			(loaded ?c ?b)
 			(filled ?b ?s)
 		)
 
