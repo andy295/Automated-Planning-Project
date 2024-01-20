@@ -9,16 +9,11 @@
 	)
 
 	(:types
-		location
-		work_station
-
-		box
-		supply
-
-		valve bolt durable tool - supply
+		location placeable - object
+		work_station supply container robotic_agent - placeable
+		valve bolt tool - supply
+		box carrier - container
 		counter
-		carrier
-		robotic_agent
 	)
 
 	(:constants
@@ -28,9 +23,9 @@
 
 	(:predicates
 		(adjacent ?l1 - location ?l2 - location)
-		(at ?o - (either work_station box supply robotic_agent carrier) ?l - location)
+		(at ?p - placeable ?l - location)
 
-		(full ?b - box ?s - supply)
+		(filled ?b - box ?s - supply)
 		(empty ?b - box)
 
 		(loaded ?r - robotic_agent ?b - box)
@@ -38,7 +33,7 @@
 
 		(locked ?o - (either box supply))
 
-		(on_cart ?b - box ?c - carrier)
+		(contained ?b - box ?c - carrier)
 
 		(delivered ?s - supply ?ws - work_station)
 
@@ -46,12 +41,14 @@
 		(with_cart ?r - robotic_agent)
 		(with_robot ?c - carrier)
 	)
- 
+
 	(:functions
 		(loaded_volume ?c - carrier)
-		(max_capacity ?c - carrier) 
-		(warehouse_passage ?r - robotic_agent)
-		(passages ?cn - counter )
+		(max_capacity ?c - carrier)
+		(carrying_capability ?r - robotic_agent)
+		(carrying_requirements ?c - carrier)
+		(value ?cn - counter )
+		(delivered_supply ?r - robotic_agent)
 	)
 
 	; Moves a robot between two locations, if it is not already there
@@ -69,27 +66,33 @@
 		:effect (and
 			(not (at ?r ?from))
 			(not (at ?c ?from))
+			(increase (value cnt) 1)
 			(at ?c ?to)
 			(at ?r ?to)
 		)
 	)
 
-	(:action attach_cart
-		:parameters(?c - carrier ?r - robotic_agent)
+	; Attaches a carrier to a robot
+	(:action attach_carrier
+		:parameters(?c - carrier ?r - robotic_agent ?l - location)
 		:precondition(and
 			(not (with_cart ?r))
 			(not (with_robot ?c))
+			(at ?r ?l)
+			(at ?c ?l)
 			(free ?r) ;robot is not holding anything
+			(< (carrying_requirements ?c) (carrying_capability ?r))
 		)
 
-				:effect (and
+		:effect (and
 			(attached ?c ?r)
 			(with_cart ?r)
 			(with_robot ?c)
 		)
 	)
 
-	(:action detach_cart
+	; Detaches a carrier from a robot
+	(:action detach_carrier
 		:parameters(?c - carrier ?r - robotic_agent)
 		:precondition(and
 			(attached ?c ?r)
@@ -99,19 +102,16 @@
 			(not (with_cart ?r))
 			(not (with_robot ?c))
 			(not (attached ?c ?r))
-
-			(increase (passages cnt) 1)
 		)
 	)
 
-	(:action load_cart
+	; Picks up a specific unloaded box and places it into the carrier
+	(:action load_carrier
 		:parameters(?r - robotic_agent ?c - carrier ?b - box ?l - location)
 		:precondition (and
 			(at ?r ?l) ;everithing is in the same spot
-			(at ?c ?l)         
-
+			(at ?c ?l)
 			(loaded ?r ?b) ;has the robot the box
-
 			(not (with_cart ?r)) ;both cart and robot are free
 			(not (with_robot ?c)) ;this one could be optional
 
@@ -121,37 +121,36 @@
 		:effect (and
 			(not (loaded ?r ?b))
 			(free ?r)
-			(on_cart ?b ?c)
+			(contained ?b ?c)
 			(not (locked ?b))
 
 			(increase (loaded_volume ?c) 1)
 		)
 	)
 
+	; Picks up a specific loaded box and from a carrier
 	(:action pick_box_from_carrier
 		:parameters (?r - robotic_agent ?c - carrier ?b - box ?l - location)
-		:precondition(and 
+		:precondition(and
 			(at ?r ?l) ;everithing is in the same spot
-			(at ?c ?l) 
-			
+			(at ?c ?l)
 			(not (with_cart ?r)) ;both cart and robot are free
-
+			(not (with_robot ?c)) ;this one could be optional
 			(free ?r) ;robot is not holding anything
-
-			(on_cart ?b ?c)
-		) 
+			(contained ?b ?c)
+		)
 
 		:effect(and
 			(locked ?b)
 			(not (free ?r))
 			(loaded ?r ?b)
-			(not (on_cart ?b ?c))
+			(not (contained ?b ?c))
 
 			(decrease (loaded_volume ?c) 1)
 		)
 	)
 
-	; Robot picks up a specific unloaded box
+	; Picks up a specific unloaded box and places it into the robot
 	(:action load_robot
 		:parameters (?r - robotic_agent ?b - box ?l - location)
 		:precondition (and
@@ -170,11 +169,11 @@
 		)
 	)
 
-	; Robot puts down the loaded box
+	; Puts down the loaded box
 	(:action free_robot
 		:parameters (?r - robotic_agent ?b - box ?l - location)
 		:precondition (and
-			(at ?r ?l) 
+			(at ?r ?l)
 			(loaded ?r ?b)
 		)
 
@@ -186,7 +185,7 @@
 		)
 	)
 
-	; Fill a box with a specific supply
+	; Fills a box with a specific supply
 	(:action fill_box
 		:parameters (?r - robotic_agent ?b - box ?s - supply)
 		:precondition (and
@@ -198,47 +197,48 @@
 		)
 
 		:effect (and
-			(full ?b ?s)
+			(filled ?b ?s)
 			(not (empty ?b))
 			(not (at ?s warehouse))
 			(locked ?s)
 		)
 	)
 
-	; Empty a box containing a specific supply
+	; Empties a box containing a specific supply
 	(:action empty_box
 		:parameters (?r - robotic_agent ?b - box ?s - supply ?l - location)
 		:precondition (and
 			(at ?r ?l)
 			(loaded ?r ?b)
-			(full ?b ?s)
-		)	
+			(filled ?b ?s)
+		)
 
 		:effect (and
 			(empty ?b)
-			(not (full ?b ?s))
+			(not (filled ?b ?s))
 			(at ?s ?l)
 			(not (locked ?s))
 		)
 	)
 
-	; Delivery a specific supply to a specific work station
+	; Deliveries a specific supply to a specific work station
 	(:action deliver_supply
 		:parameters (?r - robotic_agent ?b - box ?s - supply ?ws - work_station ?l - location)
 		:precondition (and
-			(not (delivered ?s ?ws))
 			(at ?ws ?l)
 			(at ?r ?l)
 			(loaded ?r ?b)
-			(full ?b ?s)
+			(filled ?b ?s)
 		)
 
 		:effect (and
 			(delivered ?s ?ws)
 			(empty ?b)
-			(not (full ?b ?s))
+			(not (filled ?b ?s))
 			(at ?s ?l)
 			(not (locked ?s))
+
+			(increase (delivered_supply ?r) 1)
 		)
 	)
 )

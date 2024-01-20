@@ -7,14 +7,12 @@
 		:universal-preconditions
 		:derived-predicates
 	)
-
 	(:types
-		location work_station container supply robotic_agent quantity - object 
-		
-		box carrier - container
-
+		location quantity placeable - object
+		work_station resizable supply - placeable
 		valve bolt tool - supply
-
+		robotic_agent container - resizable
+		box carrier - container
 		amr drone - robotic_agent
 	)
 
@@ -24,20 +22,20 @@
 
 	(:predicates
 		(adjacent ?l1 - location ?l2 - location)
-		(at ?o - (either container robotic_agent supply work_station) ?l - location)
+		(at ?p - placeable ?l - location)
 
-		(associated ?r - robotic_agent ?c - carrier)
-		(dissociated ?r - robotic_agent)
+		(attached ?r - robotic_agent ?c - carrier)
+		(detached ?r - robotic_agent)
 
-		(occupied ?c - carrier ?b - box)
+		(loaded ?c - carrier ?b - box)
 
 		(filled ?b - box ?s - supply)
 
 		(empty ?c - container)
 		(locked ?o - (either container supply))
 
-		(is_small ?o - (either robotic_agent carrier))
-		(is_big ?o - (either robotic_agent carrier))
+		(is_small ?r - resizable)
+		(is_big ?r - resizable)
 
 		(compatible ?r - robotic_agent ?c - carrier)
 
@@ -56,8 +54,9 @@
 	(:derived (compatible ?r - robotic_agent ?c - carrier)
 		(or
 			(and
+				; we assume big robot can hold big and small carriers
+				; more conditions can be added here to change the assumption
 				(is_big ?r)
-			(is_big ?c)	
 			)
 			(and
 				(is_small ?r)
@@ -86,7 +85,7 @@
 			(not (= ?from ?to))
 			(adjacent ?from ?to)
 			(at ?r ?from)
-			(associated ?r ?c)
+			(attached ?r ?c)
 		)
 
 		:effect (and
@@ -95,48 +94,48 @@
 		)
 	)
 
-	; Associate a carrier to a robot
-	(:action associate_carrier
+	; Attaches a carrier to a robot
+	(:action attach_carrier
 		:parameters (?r - robotic_agent ?c - carrier ?l - location)
 		:precondition (and
 			(at ?r ?l)
 			(at ?c ?l)
-			(dissociated ?r)
+			(detached ?r)
 			(not (locked ?c))
 			(compatible ?r ?c)
 		)
 
 		:effect (and
-			(associated ?r ?c)
-			(not (dissociated ?r))
+			(attached ?r ?c)
+			(not (detached ?r))
 			(locked ?c)
 			(not (at ?c ?l))
 		)
 	)
 
-	; Dissociate a carrier from a robot
-	(:action dissociate_carrier
+	; Detaches a carrier from a robot
+	(:action detach_carrier
 		:parameters (?r - robotic_agent ?c - carrier ?l - location)
 		:precondition (and
 			(at ?r ?l)
-			(associated ?r ?c)
+			(attached ?r ?c)
 		)
 
 		:effect (and
-			(dissociated ?r)
-			(not (associated ?r ?c))
+			(detached ?r)
+			(not (attached ?r ?c))
 			(not (locked ?c))
 			(at ?c ?l)
 		)
 	)
 
-	; Robot picks up a specific unloaded box and places it into the carrier
-	(:action occupy_carrier
+	; Picks up a specific unloaded box and places it into the carrier
+	(:action load_carrier
 		:parameters (?r - robotic_agent ?c - carrier ?b - box ?actual_q ?next_q - quantity ?l - location)
 		:precondition (and
 			(at ?r ?l)
 			(at ?b ?l)
-			(associated ?r ?c)
+			(attached ?r ?c)
 			(empty ?c)
 			(not (locked ?b))
 			(contained ?c ?actual_q)
@@ -144,7 +143,7 @@
 		)
 
 		:effect (and
-			(occupied ?c ?b)
+			(loaded ?c ?b)
 			(locked ?b)
 			(not (at ?b ?l))
 			(contained ?c ?next_q)
@@ -161,26 +160,26 @@
 		)
 	)
 
-	; Robot puts down the loaded box
+	; Puts down the loaded box
 	(:action empty_carrier
 		:parameters (?r - robotic_agent ?c - carrier ?b - box ?actual_q ?next_q - quantity ?l - location)
 		:precondition (and
 			(at ?r ?l)
-			(associated ?r ?c)
-			(occupied ?c ?b)
+			(attached ?r ?c)
+			(loaded ?c ?b)
 			(contained ?c ?actual_q)
 			(decreased_by_1 ?actual_q ?next_q)
 		)
 
 		:effect (and
-			(not (occupied ?c ?b))
+			(not (loaded ?c ?b))
 			(not (locked ?b))
 			(at ?b ?l)
 			(contained ?c ?next_q)
 			(not (contained ?c ?actual_q))
 
 			(when
-				(and 
+				(and
 					(all_min_quantity ?next_q)
 				)
 
@@ -191,14 +190,14 @@
 		)
 	)
 
-	; Fill a box with a specific supply
+	; Fills a box with a specific supply
 	(:action fill_box
 		:parameters (?r - robotic_agent ?c - carrier ?b - box ?s - supply)
 		:precondition (and
 			(at ?r warehouse)
 			(at ?s warehouse)
-			(associated ?r ?c)
-			(occupied ?c ?b)
+			(attached ?r ?c)
+			(loaded ?c ?b)
 			(empty ?b)
 			(not (locked ?s))
 		)
@@ -211,15 +210,15 @@
 		)
 	)
 
-	; Empty a box containing a specific supply
+	; Empties a box containing a specific supply
 	(:action empty_box
 		:parameters (?r - robotic_agent ?c - carrier ?b - box ?s - supply ?l - location)
 		:precondition (and
 			(at ?r ?l)
-			(associated ?r ?c)
-			(occupied ?c ?b)
+			(attached ?r ?c)
+			(loaded ?c ?b)
 			(filled ?b ?s)
-		)	
+		)
 
 		:effect (and
 			(empty ?b)
@@ -229,15 +228,15 @@
 		)
 	)
 
-	; Delivery a specific supply to a specific work station
+	; Deliveries a specific supply to a specific work station
 	(:action deliver_supply
 		:parameters (?r - robotic_agent ?c - carrier ?b - box ?s - supply ?ws - work_station ?l - location)
 		:precondition (and
 			(not (delivered ?s ?ws))
 			(at ?ws ?l)
 			(at ?r ?l)
-			(associated ?r ?c)
-			(occupied ?c ?b)
+			(attached ?r ?c)
+			(loaded ?c ?b)
 			(filled ?b ?s)
 		)
 
