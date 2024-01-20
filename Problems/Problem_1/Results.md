@@ -7,6 +7,8 @@
 ## Solution
 
 ### LAMA-First
+
+```bash
 1. (load_robot robot1 box1 warehouse)
 2. (fill_box robot1 box1 tool1)
 3. (move_robot robot1 warehouse location2)
@@ -30,6 +32,7 @@
 21. (move_robot robot1 warehouse location2)
 22. (move_robot robot1 location2 location4)
 23. (deliver_supply robot1 box1 tool2 work_station4 location4)
+```
 
 ### Comments
 It is possible to use the LAMA planner as well by using the following command:
