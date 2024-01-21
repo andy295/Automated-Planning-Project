@@ -21,7 +21,7 @@ colcon build --symlink-install
 source install/setup.bash
 
 # launch the problem
-ros2 launch plansys2_task5 plansys2_task5_launch.py
+ros2 launch plansys2 problem_5_launch.py
 ```
 
 ### Terminal 2
@@ -43,7 +43,7 @@ ros2 run plansys2_terminal plansys2_terminal
 # once ros2 is running, run the following commands
 
 # ros2 commands
-source pddl/domain 1
+source pddl/problem_1 1
 get plan
 run
 ```
