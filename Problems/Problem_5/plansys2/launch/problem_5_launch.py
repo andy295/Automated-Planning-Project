@@ -81,18 +81,18 @@ def generate_launch_description():
 		output='screen',
 		parameters=[])
 
-	fill_box_action_node_cmd = Node(
+	empty_carrier_action_node_cmd = Node(
 		package='plansys2',
-		executable='fill_box_action_node',
-		name='fill_box_action_node',
+		executable='empty_carrier_action_node',
+		name='empty_carrier_action_node',
 		namespace=namespace,
 		output='screen',
 		parameters=[])
 
-	free_robot_action_node_cmd = Node(
+	fill_box_action_node_cmd = Node(
 		package='plansys2',
-		executable='free_robot_action_node',
-		name='free_robot_action_node',
+		executable='fill_box_action_node',
+		name='fill_box_action_node',
 		namespace=namespace,
 		output='screen',
 		parameters=[])
@@ -105,26 +105,10 @@ def generate_launch_description():
 		output='screen',
 		parameters=[])
 
-	load_robot_action_node_cmd = Node(
-		package='plansys2',
-		executable='load_robot_action_node',
-		name='load_robot_action_node',
-		namespace=namespace,
-		output='screen',
-		parameters=[])
-
 	move_robot_cmd = Node(
 		package='plansys2',
-		executable='move_action_node',
-		name='move_action_node',
-		namespace=namespace,
-		output='screen',
-		parameters=[])
-
-	pick_box_from_carrier_action_node_cmd = Node(
-		package='plansys2',
-		executable='pick_box_from_carrier_action_node',
-		name='pick_box_from_carrier_action_node',
+		executable='move_robot_action_node',
+		name='move_robot_action_node',
 		namespace=namespace,
 		output='screen',
 		parameters=[])
@@ -142,12 +126,10 @@ def generate_launch_description():
 	ld.add_action(deliver_supply_action_node_cmd)
 	ld.add_action(detach_carrier_action_node_cmd)
 	ld.add_action(empty_box_actione_node_cmd)
+	ld.add_action(empty_carrier_action_node_cmd)
 	ld.add_action(fill_box_action_node_cmd)
-	ld.add_action(free_robot_action_node_cmd)
 	ld.add_action(load_carrier_action_node_cmd)
-	ld.add_action(load_robot_action_node_cmd)
 	ld.add_action(move_robot_cmd)
-	ld.add_action(pick_box_from_carrier_action_node_cmd)
 
 	# Return the launch descriptor
 	return ld

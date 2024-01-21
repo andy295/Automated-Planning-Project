@@ -20,8 +20,7 @@ class LoadCarrier : public plansys2::ActionExecutorClient
 		}
 
 	private:
-		const static double duration = 2500.0;
-
+		double duration = 2500.0;
 		double progress_;
 		double calls;
 		double increment;

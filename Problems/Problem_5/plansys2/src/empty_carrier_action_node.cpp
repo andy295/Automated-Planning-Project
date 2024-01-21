@@ -8,20 +8,19 @@
 
 using namespace std::chrono_literals;
 
-class LoadRobot : public plansys2::ActionExecutorClient
+class EmptyCarrier : public plansys2::ActionExecutorClient
 {
 	public:
-		LoadRobot()
-		: plansys2::ActionExecutorClient("load_robot", 500ms)
+		EmptyCarrier()
+		: plansys2::ActionExecutorClient("empty_carrier", 250ms)
 		{
 			progress_ = 0.0;
-			calls = duration / 200.0;
+			calls = duration / 500.0;
 			increment = 1.0 / calls;
 		}
 
 	private:
-		const static double duration = 2500.0;
-
+		double duration = 2500.0;
 		double progress_;
 		double calls;
 		double increment;
@@ -31,27 +30,27 @@ class LoadRobot : public plansys2::ActionExecutorClient
 			if (progress_ < 1.0)
 			{
 				progress_ += increment;
-				send_feedback(progress_, "Loading robot in progress");
+				send_feedback(progress_, "Emptying carrier in progress");
 			}
 			else
 			{
-				finish(true, 1.0, "Robot loaded");
+				finish(true, 1.0, "Carrier emptied");
 
 				progress_ = 0.0;
 				std::cout << std::endl;
 			}
 
 			std::cout << "\r\e[K" << std::flush;
-			std::cout << "Robot loading ... [" << std::min(100.0, progress_ * 100.0) << "%]  " << std::flush;
+			std::cout << "Emptying carrier ... [" << std::min(100.0, progress_ * 100.0) << "%]  " << std::flush;
 		}
 };
 
 int main(int argc, char ** argv)
 {
 	rclcpp::init(argc, argv);
-	auto node = std::make_shared<LoadRobot>();
+	auto node = std::make_shared<EmptyCarrier>();
 
-	node->set_parameter(rclcpp::Parameter("action_name", "load_robot"));
+	node->set_parameter(rclcpp::Parameter("action_name", "empty_carrier"));
 	node->trigger_transition(lifecycle_msgs::msg::Transition::TRANSITION_CONFIGURE);
 
 	rclcpp::spin(node->get_node_base_interface());

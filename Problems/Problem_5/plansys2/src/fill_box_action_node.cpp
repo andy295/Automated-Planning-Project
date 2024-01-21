@@ -20,17 +20,16 @@ class FillBox : public plansys2::ActionExecutorClient
 		}
 
 	private:
-		const static double duration = 5000.0;
-
+		double duration = 5000.0;
 		double progress_;
 		double calls;
 		double increment;
 
 		void do_work()
 		{
-			if (progress < 1.0)
+			if (progress_ < 1.0)
 			{
-				progress += increment;
+				progress_ += increment;
 				send_feedback(progress_, "Filling box in progress");
 			}
 			else

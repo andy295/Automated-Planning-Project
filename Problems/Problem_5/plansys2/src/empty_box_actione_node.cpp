@@ -20,8 +20,7 @@ class EmptyBox : public plansys2::ActionExecutorClient
 		}
 
 	private:
-		const static double duration = 2500.0;
-
+		double duration = 2500.0;
 		double progress_;
 		double calls;
 		double increment;
@@ -42,7 +41,7 @@ class EmptyBox : public plansys2::ActionExecutorClient
 			}
 
 			std::cout << "\r\e[K" << std::flush;
-			std::cout << "Loading carrier ... [" << std::min(100.0, progress_ * 100.0) << "%]  " << std::flush;
+			std::cout << "Emptying box ... [" << std::min(100.0, progress_ * 100.0) << "%]  " << std::flush;
 		}
 };
 

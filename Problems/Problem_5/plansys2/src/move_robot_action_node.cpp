@@ -8,11 +8,11 @@
 
 using namespace std::chrono_literals;
 
-class Move : public plansys2::ActionExecutorClient
+class MoveRobot : public plansys2::ActionExecutorClient
 {
 	public:
-		Move()
-		: plansys2::ActionExecutorClient("move", 500ms)
+		MoveRobot()
+		: plansys2::ActionExecutorClient("move_robot", 500ms)
 		{
 			progress_ = 0.0;
 			calls = duration / 200.0;
@@ -20,8 +20,7 @@ class Move : public plansys2::ActionExecutorClient
 		}
 
 	private:
-		const static double duration = 6000.0;
-
+		double duration = 6000.0;
 		double progress_;
 		double calls;
 		double increment;
@@ -49,9 +48,9 @@ class Move : public plansys2::ActionExecutorClient
 int main(int argc, char ** argv)
 {
 	rclcpp::init(argc, argv);
-	auto node = std::make_shared<Move>();
+	auto node = std::make_shared<MoveRobot>();
 
-	node->set_parameter(rclcpp::Parameter("action_name", "move"));
+	node->set_parameter(rclcpp::Parameter("action_name", "move_robot"));
 	node->trigger_transition(lifecycle_msgs::msg::Transition::TRANSITION_CONFIGURE);
 
 	rclcpp::spin(node->get_node_base_interface());

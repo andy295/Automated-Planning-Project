@@ -42,18 +42,32 @@ set predicate (at_l work_station2 location3)
 set predicate (at_l work_station3 location4)
 set predicate (at_l work_station4 location4)
 
+set predicate (at_s valve1 warehouse)
+set predicate (at_s bolt1 warehouse)
+set predicate (at_s valve2 warehouse)
+set predicate (at_s bolt2 warehouse)
+set predicate (at_s tool2 warehouse)
+set predicate (at_s tool1 warehouse)
+
+
+set predicate (unlocked_s valve1)
+set predicate (unlocked_s valve2)
+set predicate (unlocked_s bolt1)
+set predicate (unlocked_s bolt2)
+set predicate (unlocked_s tool1)
+set predicate (unlocked_s tool2)
 
 set predicate (at_l box1 warehouse)
 set predicate (empty box1)
-set predicate (unlocked box1)
+set predicate (unlocked_b box1)
 
 set predicate (at_l box2 warehouse)
 set predicate (empty box2)
-set predicate (unlocked box2)
+set predicate (unlocked_b box2)
 
 set predicate (at_l box3 warehouse)
 set predicate (empty box3)
-set predicate (unlocked box3)
+set predicate (unlocked_b box3)
 
 set predicate (at_l robot1 warehouse)
 set predicate (free robot1)
@@ -64,32 +78,20 @@ set predicate (at_l robot2 warehouse)
 set predicate (free robot2)
 set predicate (free_from_cart robot2)
 set predicate (not_in_action robot2)
-		
-set function (= (passages cnt) 0)
 
+		
 set predicate (at_l carrier1 warehouse)
-set function (= (loaded_volume carrier1) 0)
-set function (= (max_capacity carrier1) 2)
+
 set predicate (free_from_robot carrier1)
 
 set predicate (at_l carrier2 warehouse)
-set function (= (loaded_volume carrier2) 0)
-set function (= (max_capacity carrier2) 2)
 set predicate (free_from_robot carrier2)
 
-set predicate (at_l valve1 warehouse)
-set predicate (unlocked valve1)
-set predicate (at_l valve2 warehouse)
-set predicate (unlocked valve2)
+set function ( (= (delivered_supply robot2) 0))
+set function (= (loaded_volume carrier2) 0)
+set function (= (max_capacity carrier2) 2)
+set function (= (loaded_volume carrier1) 0)
+set function (= (max_capacity carrier1) 2)
 
-set predicate (at_l bolt1 warehouse)
-set predicate (unlocked bolt1)
-set predicate (at_l bolt2 warehouse)
-set predicate (unlocked bolt2)
 
-set predicate (at_l tool1 warehouse)
-set predicate (unlocked tool1)
-set predicate (at_l tool2 warehouse)
-set predicate (unlocked tool2)
-
-set goal (and (delivered valve1 work_station1) (delivered tool1 work_station1) (delivered bolt1 work_station1) (delivered tool2 work_station4))
+set goal (and (delivered valve1 work_station1) (delivered tool1 work_station1) )

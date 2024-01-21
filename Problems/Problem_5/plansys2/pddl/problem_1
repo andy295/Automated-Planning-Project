@@ -1,0 +1,82 @@
+set instance warehouse location
+set instance location1 location
+set instance location2 location
+set instance location3 location
+
+set instance work_station1 work_station
+set instance work_station2 work_station
+set instance work_station3 work_station
+
+set instance box1 box
+set instance box2 box
+set instance box3 box
+
+set instance amr1 robotic_agent
+
+set instance carrier1 carrier
+
+set instance valve1 valve
+set instance valve2 valve
+
+set instance bolt1 bolt
+set instance bolt2 bolt
+
+set instance tool1 tool
+set instance tool2 tool
+
+set predicate (adjacent warehouse location2)
+set predicate (adjacent location1 location2)
+set predicate (adjacent location3 location2)
+
+set predicate (adjacent location2 warehouse)
+set predicate (adjacent location2 location1)
+set predicate (adjacent location2 location3)
+
+set predicate (at_work_station work_station1 location1)
+set predicate (at_work_station work_station2 location3)
+set predicate (at_work_station work_station3 location3)
+
+set predicate (at_container box1 warehouse)
+set predicate (not_locked_container box1)
+set predicate (empty box1)
+
+set predicate (at_container box2 warehouse)
+set predicate (not_locked_container box2)
+set predicate (empty box2)
+
+set predicate (at_container box3 warehouse)
+set predicate (not_locked_container box3)
+set predicate (empty box3)
+
+set predicate (at_robotic_agent amr1 warehouse)
+set predicate (detached amr1)
+set predicate (availiable amr1)
+
+set predicate (at_container carrier1 warehouse)
+set predicate (not_locked_container carrier1)
+
+set predicate (at_supply valve1 warehouse)
+set predicate (not_locked_supply valve1)
+
+set predicate (at_supply valve2 warehouse)
+set predicate (not_locked_supply valve2)
+
+set predicate (at_supply bolt1 warehouse)
+set predicate (not_locked_supply bolt1)
+
+set predicate (at_supply bolt2 warehouse)
+set predicate (not_locked_supply bolt2)
+
+set predicate (at_supply tool1 warehouse)
+set predicate (not_locked_supply tool1)
+
+set predicate (at_supply tool2 warehouse)
+set predicate (not_locked_supply tool2)
+
+set function (= (delivered_supply amr1) 0)
+set function (= (carrying_capability amr1) 10)
+set function (= (loaded_volume carrier1) 0)
+set function (= (max_capacity carrier1) 4)
+set function (= (carrying_requirements carrier1) 8)
+
+set goal (and (attached amr1 carrier1))
