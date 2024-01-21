@@ -32,6 +32,8 @@
 21. (move_robot robot1 warehouse location2)
 22. (move_robot robot1 location2 location4)
 23. (deliver_supply robot1 box1 tool2 work_station4 location4)
+
+Plan cost: 23
 ```
 
 ### Comments
