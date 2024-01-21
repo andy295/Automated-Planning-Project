@@ -6,9 +6,10 @@
 
 		work_station1 work_station2 work_station3 work_station4 - work_station
 
-		box1 box2 box3 - box
+		box1 box2 box3 box4 box5 - box
 
-		robot1 robot2 - robotic_agent
+		drone1 - drone
+		amr1 - amr
 
 		carrier1 carrier2 - carrier
 
@@ -37,62 +38,80 @@
 
 		; boxes
 		(at box1 warehouse)
+		(not_locked box1)
 		(empty box1)
+
 		(at box2 warehouse)
+		(not_locked box2)
 		(empty box2)
+
 		(at box3 warehouse)
+		(not_locked box3)
 		(empty box3)
 
+		(at box4 warehouse)
+		(not_locked box4)
+		(empty box4)
+
+		(at box5 warehouse)
+		(not_locked box5)
+		(empty box5)
+
 		;robots
-		(at robot1 warehouse)
-		(free robot1)
-		(= (carrying_capability robot1) 10)
-		(= (delivered_supply robot1) 0)
+		(at amr1 warehouse)
+		(detached amr1)
+		(= (carrying_capability amr1) 10)
+		(= (delivered_supply amr1) 0)
 
-		(at robot2 warehouse)
-		(free robot2)
-		(= (carrying_capability robot2) 10)
-		(= (delivered_supply robot2) 0)
+		(at drone1 warehouse)
+		(detached drone1)
+		(= (carrying_capability drone1) 5)
+		(= (delivered_supply drone1) 0)
 
+		; counters
 		(= (value cnt) 0)
 
 		; carriers
 		(at carrier1 warehouse)
+		(not_locked carrier1)
 		(= (loaded_volume carrier1) 0)
-		(= (max_capacity carrier1) 3)
-		(= (carrying_requirements carrier1) 8 )
+		(= (max_capacity carrier1) 4)
+		(= (carrying_requirements carrier1) 8)
 
 		(at carrier2 warehouse)
+		(not_locked carrier2)
 		(= (loaded_volume carrier2) 0)
-		(= (max_capacity carrier2) 3)
-		(= (carrying_requirements carrier1) 8 )
+		(= (max_capacity carrier2) 2)
+		(= (carrying_requirements carrier2) 4)
 
 		; supplies
 		(at valve1 warehouse)
+		(not_locked valve1)
+
 		(at valve2 warehouse)
+		(not_locked valve2)
 
 		(at bolt1 warehouse)
+		(not_locked bolt1)
+
 		(at bolt2 warehouse)
+		(not_locked bolt2)
 
 		(at tool1 warehouse)
+		(not_locked tool1)
+
 		(at tool2 warehouse)
+		(not_locked tool2)
 	)
 
 	(:goal (and
-
 			(exists (?v - valve) (delivered ?v work_station1))
 			(exists (?t - tool) (delivered ?t work_station1))
-			
-			(exists (?b - bolt) (delivered ?b work_station2))
+
 			(exists (?t - tool) (delivered ?t work_station4))
-
 			(exists (?b - bolt) (delivered ?b work_station3))
-
-			; enable them if you want to enforce the usage of both robots
-			; (> (delivered_supply robot1) 1)
-			; (> (delivered_supply robot2) 1)
 		)
 	)
 
-	(:metric minimize (value cnt) )
+	(:metric minimize (value cnt))
 )

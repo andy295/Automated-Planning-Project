@@ -13,6 +13,7 @@
 		work_station supply container robotic_agent - placeable
 		valve bolt tool - supply
 		box carrier - container
+		amr drone - robotic_agent
 		counter
 	)
 
@@ -28,9 +29,9 @@
 		(attached ?r - robotic_agent ?c - carrier)
 		(detached ?r - robotic_agent)
 
-        (loaded ?c - carrier ?b - box)
-	
-        (filled ?b - box ?s - supply)
+		(loaded ?c - carrier ?b - box)
+
+		(filled ?b - box ?s - supply)
 		(empty ?b - box)
 
 		(locked ?o - (either container supply))
@@ -55,6 +56,17 @@
 			(adjacent ?from ?to)
 			(at ?r ?from)
 			(attached ?r ?c)
+
+			; move back to warehouse only if the carrier is empty
+			(or
+				(and 
+					(not (= ?to warehouse))
+				)
+				(and
+					(= ?to warehouse)
+					(= (loaded_volume ?c) 0)
+				)
+			)
 		)
 
 		:effect (and
@@ -86,7 +98,7 @@
 			(increase (value cnt) 1)
 		)
 	)
-	
+
 	; Detaches a carrier from a robot
 	(:action detach_carrier
 		:parameters (?r - robotic_agent ?c - carrier ?l - location)
@@ -111,8 +123,8 @@
 		:precondition (and
 			(at ?r ?l)
 			(at ?b ?l)
-            (attached ?r ?c)
-            (not_locked ?b)
+			(attached ?r ?c)
+			(not_locked ?b)
 
 			(< (loaded_volume ?c) (max_capacity ?c))
 		)
@@ -128,7 +140,7 @@
 		)
 	)
 
-    ; Puts down the loaded box
+	; Puts down the loaded box
 	(:action empty_carrier
 		:parameters (?r - robotic_agent ?c - carrier ?b - box ?l - location)
 		:precondition (and
@@ -190,7 +202,7 @@
 		)
 	)
 
-    ; Deliveries a specific supply to a specific work station
+	; Deliveries a specific supply to a specific work station
 	(:action deliver_supply
 		:parameters (?r - robotic_agent ?c - carrier ?b - box ?s - supply ?ws - work_station ?l - location)
 		:precondition (and
