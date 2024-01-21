@@ -28,6 +28,7 @@
 		(detached ?r - robotic_agent)
 
 		(loaded ?c - carrier ?b - box)
+		(has_space ?c - carrier)
 
 		(filled ?b - box ?s - supply)
 
@@ -86,6 +87,17 @@
 			(adjacent ?from ?to)
 			(at ?r ?from)
 			(attached ?r ?c)
+
+			; move back to warehouse only if the carrier is empty
+			(or
+				(and 
+					(not (= ?to warehouse))
+				)
+				(and
+					(= ?to warehouse)
+					(empty ?c)
+				)
+			)
 		)
 
 		:effect (and
@@ -136,7 +148,7 @@
 			(at ?r ?l)
 			(at ?b ?l)
 			(attached ?r ?c)
-			(empty ?c)
+			(has_space ?c)
 			(not (locked ?b))
 			(contained ?c ?actual_q)
 			(increased_by_1 ?actual_q ?next_q)
@@ -149,12 +161,14 @@
 			(contained ?c ?next_q)
 			(not (contained ?c ?actual_q))
 
+			; if the carrier is full, it is not possible to load another box
 			(when
 				(and 
 					(is_full ?c ?next_q)
 				)
 				(and
 					(not (empty ?c))
+					(not (has_space ?c))
 				)
 			)
 		)
@@ -178,6 +192,7 @@
 			(contained ?c ?next_q)
 			(not (contained ?c ?actual_q))
 
+			; if the carrier does not contain any box, it is empty
 			(when
 				(and
 					(all_min_quantity ?next_q)
@@ -185,6 +200,18 @@
 
 				(and
 					(empty ?c)
+				)
+			)
+
+			; if the carrier is not full, it is possible to load another box
+			(when
+				(and
+					(not (all_min_quantity ?next_q))
+					(not (is_full ?c ?next_q))
+				)
+
+				(and
+					(has_space ?c)
 				)
 			)
 		)

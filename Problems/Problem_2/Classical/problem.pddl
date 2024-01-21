@@ -63,11 +63,13 @@
 		; carriers
 		(at carrier1 warehouse)
 		(empty carrier1)
+		(has_space carrier1)
 		(is_big carrier1)
 		(contained carrier1 n0)
 
 		(at carrier2 warehouse)
 		(empty carrier2)
+		(has_space carrier2)
 		(is_small carrier2)
 		(contained carrier2 n0)
 
@@ -99,7 +101,7 @@
 
 	(:goal (and
 		(exists (?v - valve) (delivered ?v work_station1))
-		(exists (?b - bolt) (delivered ?b work_station2))		
+		(exists (?b - bolt) (delivered ?b work_station2))	
 		(exists (?b - bolt) (delivered ?b work_station3))
 	))
 )
