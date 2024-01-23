@@ -42,13 +42,13 @@
 
 		(delivered ?s - supply ?ws - work_station)
 		(availiable ?r - robotic_agent)
+
+		(compatible ?r - robotic_agent ?c - carrier)
 	)
 
 	(:functions
 		(loaded_volume ?c - carrier)
 		(max_capacity ?c - carrier)
-		(carrying_capability ?r - robotic_agent)
-		(carrying_requirements ?c - carrier)
 		(delivered_supply ?r - robotic_agent)
 	)
 
@@ -76,15 +76,15 @@
 	; Attaches a carrier to a robot
 	(:durative-action attach_carrier
 		:parameters (?c - carrier ?r - robotic_agent ?l - location)
-		:duration (= ?duration 4)
+		:duration (= ?duration 1)
 		:condition (and
-			(over all (at_robotic_agent ?r ?l))
-			(over all (at_container ?c ?l))
-			(over all (< (carrying_requirements ?c) (carrying_capability ?r)))
-
+			(over all (at_robotic_agent ?r ?l))			
+			(over all (compatible ?r ?c))
+			
 			(at start (detached ?r))
 			(at start (not_locked_container ?c))
 			(at start (availiable ?r))
+			(at start (at_container ?c ?l))
 		)
 
 		:effect (and
@@ -127,8 +127,8 @@
 		:condition (and
 			(over all (at_robotic_agent ?r ?l))
 			(over all (attached ?r ?c))
-			(over all (< (loaded_volume ?c) (max_capacity ?c)))
 
+			(at start (< (loaded_volume ?c) (max_capacity ?c)))
 			(at start (at_container ?b ?l))
 			(at start (not_locked_container ?b))
 			(at start (availiable ?r))

@@ -1,9 +1,39 @@
 # Problem 5
 
 ## Commands
-To run the problem, two terminals are needed.
+Two options are available to run the problem:
 
-### Terminal 1
+### Option 1
+
+#### Terminal 1
+Open the first terminal and run the following commands:
+```bash
+# move to the workspace
+cd ~/<path>/Problem_5/plansys2
+
+# to make the script executable (only once)
+chmod +x terminal_1_compile_and_run.sh
+
+# run the script
+./terminal_1_compile_and_run.sh
+```
+
+#### Terminal 2
+Open the second terminal and run the following commands:
+```bash
+# move to the workspace
+cd ~/<path>/Problem_5/plansys2
+
+# to make the script executable (only once)
+chmod +x terminal_2_run
+
+# run the script
+./terminal_2_run.sh
+```
+
+### Option 2
+
+#### Terminal 1
 Open the first terminal and run the following commands:
 
 ```bash
@@ -24,7 +54,7 @@ source install/setup.bash
 ros2 launch plansys2 problem_5_launch.py
 ```
 
-### Terminal 2
+#### Terminal 2
 Open the second terminal and run the following commands:
 
 ```bash
@@ -39,11 +69,14 @@ source install/setup.bash
 
 # launch the problem
 ros2 run plansys2_terminal plansys2_terminal
+```
 
-# once ros2 is running, run the following commands
+### Finals steps
+After starting ROS2, execute the following commands:
 
-# ros2 commands
-source pddl/problem_1 1
+```bash
+# ROS2 commands
+source pddl/problem_<version> 1
 get plan
 run
 ```
