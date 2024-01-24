@@ -113,8 +113,8 @@ Finally, to address problem 5, [PlanSys2](https://github.com/PlanSys2/ros2_plann
 
 For correct installation and configuration of the tools, please refer to the official documentation.
 
-The project was developed and tested on Ubuntu 20.04 LTS and Ubuntu 22.04 LTS. However, with appropriate adjustments, it is possible to use the proposed solutions on other operating systems and/or planning systems.
+The project was developed and tested on `Ubuntu 20.04 LTS` and `Ubuntu 22.04 LTS``. However, with appropriate adjustments, it is possible to use the proposed solutions on other operating systems and/or planning systems.
 
-Inside the Results.md file for each problem, it is possible to find instructions for executing the proposed solutions.
+Inside the `Results.md`` file for each problem, it is possible to find instructions for executing the proposed solutions.
 
 More details about the development of the project can be found in the [Report]().
