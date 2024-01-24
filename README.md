@@ -17,15 +17,18 @@ Additionally, some other files necessary for the proper functioning of the solut
 	- Tool: Planutils
 	- Planner: LAMA-First
 	- Content:
+	```bash
 		├── domain.pddl
 		├── problem.pddl
-		└── [Results.md](https://github.com/andy295/Automated-Planning-Project/blob/main/Problems/Problem_1/Results.md)
+		└── Results.md
+	```
 
 - **Problem 2**
 	- Objective: A robot delivers tools to workstations. However, this time, it must use a carrier, and it is mandatory to keep track of the number of loaded tools.
 	- Tool: Planutils
 	- Planner: LAMA and Metric-ff
 	- Content:
+	```bash
 		├── Classical
 		│   ├── domain.pddl
 		│   └── problem.pddl
@@ -33,37 +36,43 @@ Additionally, some other files necessary for the proper functioning of the solut
 		│   ├── domain.pddl
 		│   ├── problem_1.pddl
 		│   └── problem_2.pddl
-		└── [Results.md](https://github.com/andy295/Automated-Planning-Project/blob/main/Problems/Problem_2/Results.md)
+		└── Results.md
+	```
 
 - **Problem 3**
 	- Objective: Repropose the solution to the previous problem, but this time using the Hierarchical Task Network (HTN).
 	- Tool: Java Virtual Machine (JVM)
 	- Planner: PANDA
 	- Content:
+	```bash
 		├── doamin.hddl
 		├── problem.hddl
 		├── PANDA.jar
-		└── [Results.md](https://github.com/andy295/Automated-Planning-Project/blob/main/Problems/Problem_3/Results.md)
+		└── Results.md
+	```
 
 - **Problem 4**
 	- Objective: Expand the proposed solution for problem 2 by introducing the concept of time through durative actions.
 	- Tool: Planutils
 	- Planner: Optic
 	- Content:
+	```bash
 		├── doamin.pddl
 		├── problem_1.pddl
 		├── problem_2.pddl
-		└── [Results.md](https://github.com/andy295/Automated-Planning-Project/blob/main/Problems/Problem_4/Results.md)
+		└── Results.md
+	```
 
 - **Problem 5**
 	- Objective: Implement the solution to the previous problem , but this time using the Hierarchical Task Network (HTN).
 	- Tool: PlanSys2 and ROS2
 	- Planner: POPF
 	- Content:
+	```bash
 		├── plansys2
 		│   ├── CMakeLists.txt
 		│   ├── package.xml
-		│   ├── [Results.md](https://github.com/andy295/Automated-Planning-Project/blob/main/Problems/Problem_5/plansys2/Results.md)
+		│   ├── Results.md
 		│   ├── terminal_1_compile_and_run.sh
 		│   ├── terminal_2_run.sh
 		│   ├── launch
@@ -89,8 +98,9 @@ Additionally, some other files necessary for the proper functioning of the solut
 		│       ├── Plan.png
 		│       ├── Source_part_1.png
 		│       └── Source_part_2.png
-		└── [Setup.md](https://github.com/andy295/Automated-Planning-Project/blob/main/Problems/Problem_5/Setup.md)
-		
+		└── Setup.md
+	```
+
 ## Usage
 
 To use the proposed solutions, it is necessary to install the planning tools and configure the development environment.
