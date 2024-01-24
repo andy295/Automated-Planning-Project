@@ -1,11 +1,10 @@
 <div align="center">
-	<h1 style="margin-bottom: 0px;"> Automated Planning: Theory and Practice </h1>
+	<h1> Automated Planning: Theory and Practice </h1>
 </div>
 
----
+## <p align="center"> Warehouse Distribution Center </p>
 
 <div align="center">
-	<h2> Warehouse Distribution Center </h2>
   	by <a href="https://github.com/andy295">Andrea Cristiano</a> & <a href="https://github.com/rossiemiliano">Emiliano Rossi</a>
 	<br>
 	Academic Year 2023 / 2024, University of Trento
