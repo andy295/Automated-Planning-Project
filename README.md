@@ -1,4 +1,17 @@
-# Automated Planning Project - Warehouse Distribution Center
+<div align="center">
+	<h1 style="margin-bottom: 0px;"> Automated Planning: Theory and Practice </h1>
+</div>
+
+---
+
+<div align="center">
+	<h2> Warehouse Distribution Center </h2>
+  	by <a href="https://github.com/andy295">Andrea Cristiano</a> & <a href="https://github.com/rossiemiliano">Emiliano Rossi</a>
+	<br>
+	Academic Year 2023 / 2024, University of Trento
+</div>
+
+---
 
 ## Overview
 
@@ -113,7 +126,7 @@ Finally, to address problem 5, [PlanSys2](https://github.com/PlanSys2/ros2_plann
 
 For correct installation and configuration of the tools, please refer to the official documentation.
 
-The project was developed and tested on `Ubuntu 20.04 LTS` and `Ubuntu 22.04 LTS``. However, with appropriate adjustments, it is possible to use the proposed solutions on other operating systems and/or planning systems.
+The project was developed and tested on `Ubuntu 20.04 LTS` and `Ubuntu 22.04 LTS`. However, with appropriate adjustments, it is possible to use the proposed solutions on other operating systems and/or planning systems.
 
 Inside the `Results.md`` file for each problem, it is possible to find instructions for executing the proposed solutions.
 
