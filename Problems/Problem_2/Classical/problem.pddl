@@ -87,12 +87,10 @@
 		(increased_by_1 n0 n1)
 		(increased_by_1 n1 n2)
 		(increased_by_1 n2 n3)
-		(increased_by_1 n3 n4)
 
 		(decreased_by_1 n1 n0)
 		(decreased_by_1 n2 n1)
 		(decreased_by_1 n3 n2)
-		(decreased_by_1 n4 n3)
 
 		(big_max_quantity n3)
 		(small_max_quantity n2)
