@@ -71,14 +71,14 @@
 		(at_l carrier1 warehouse)
 		(not_locked carrier1)
 		(= (loaded_volume carrier1) 0)
-		(= (max_capacity carrier1) 2)
-		(= (carrying_requirements carrier1) 4)
+		(= (max_capacity carrier1) 4)
+		(= (carrying_requirements carrier1) 8)
 
 		(at_l carrier2 warehouse)
 		(not_locked carrier2)
 		(= (loaded_volume carrier2) 0)
-		(= (max_capacity carrier2) 3)
-		(= (carrying_requirements carrier2) 8)
+		(= (max_capacity carrier2) 2)
+		(= (carrying_requirements carrier2) 4)
 
 		; supplies
 		(at_l valve1 warehouse)
@@ -102,9 +102,8 @@
 
 	(:goal (and
 			(delivered valve1 work_station1)
-			(delivered tool1 work_station1)
+			(delivered tool1 work_station3)
 			(delivered bolt1 work_station3)
-			(delivered tool2 work_station2)
 		)
 	)
 
