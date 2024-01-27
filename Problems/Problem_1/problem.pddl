@@ -53,7 +53,6 @@
 
 	(:goal (and
 		(exists (?t - tool) (delivered ?t work_station1))
-
 		(exists (?b - bolt) (delivered ?b work_station3))
 		(exists (?t - tool) (delivered ?t work_station3))
 	))
