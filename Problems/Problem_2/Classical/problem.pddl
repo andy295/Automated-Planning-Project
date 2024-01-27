@@ -101,7 +101,7 @@
 
 	(:goal (and
 		(exists (?v - valve) (delivered ?v work_station1))
-		(exists (?b - bolt) (delivered ?b work_station2))
+		(exists (?b - bolt) (delivered ?b work_station3))
 		(exists (?b - bolt) (delivered ?b work_station3))
 	))
 )
