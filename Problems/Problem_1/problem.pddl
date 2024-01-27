@@ -2,7 +2,7 @@
 	(:domain industrial_manufacturing)
 
 	(:objects 
-		location1 location2 location3 location4 - location
+		location1 location2 location3 - location
 
 		work_station1 work_station2 work_station3 work_station4 - work_station
 
@@ -23,18 +23,14 @@
 		(adjacent warehouse location2)
 		(adjacent location1 location2)
 		(adjacent location3 location2)
-		(adjacent location4 location2)
 
 		(adjacent location2 warehouse)
 		(adjacent location2 location1)
 		(adjacent location2 location3)
-		(adjacent location2 location4)
 
 		; work stations
 		(at work_station1 location1)
 		(at work_station2 location3)
-		(at work_station3 location4)
-		(at work_station4 location4)
 
 		; boxes
 		(at box1 warehouse)
@@ -58,9 +54,7 @@
 	(:goal (and
 		(exists (?t - tool) (delivered ?t work_station1))
 
-		(exists (?b - bolt) (delivered ?b work_station4))
-		(exists (?t - tool) (delivered ?t work_station4))
-
 		(exists (?b - bolt) (delivered ?b work_station3))
+		(exists (?t - tool) (delivered ?t work_station3))
 	))
 )
