@@ -27,7 +27,7 @@ Additionally, some other files necessary for the proper functioning of the solut
 - **Problem 1**
 	- Objective: A robot delivers tools to workstations.
 	- Tool: Planutils
-	- Planner: LAMA-First
+	- Planner: LAMA and LAMA-First
 	- Content:
 	```bash
 		├── domain.pddl
@@ -38,7 +38,7 @@ Additionally, some other files necessary for the proper functioning of the solut
 - **Problem 2**
 	- Objective: A robot delivers tools to workstations. However, this time, it must use a carrier, and it is mandatory to keep track of the number of loaded tools.
 	- Tool: Planutils
-	- Planner: LAMA and Metric-ff
+	- Planner: LAMA, LAMA-First and Metric-ff
 	- Content:
 	```bash
 		├── Classical
@@ -66,7 +66,7 @@ Additionally, some other files necessary for the proper functioning of the solut
 - **Problem 4**
 	- Objective: Expand the proposed solution for problem 2 by introducing the concept of time through durative actions.
 	- Tool: Planutils
-	- Planner: Optic
+	- Planner: OPTIC
 	- Content:
 	```bash
 		├── doamin.pddl
@@ -76,7 +76,7 @@ Additionally, some other files necessary for the proper functioning of the solut
 	```
 
 - **Problem 5**
-	- Objective: Implement the solution to the previous problem , but this time using the Hierarchical Task Network (HTN).
+	- Objective: Implement the solution to the previous problem, but this time using the PlanSys2 framework.
 	- Tool: PlanSys2 and ROS2
 	- Planner: POPF
 	- Content:
@@ -117,16 +117,16 @@ Additionally, some other files necessary for the proper functioning of the solut
 
 To use the proposed solutions, it is necessary to install the planning tools and configure the development environment.
 
-For solutions to problems 1, 2, and 4, [Planutils](https://github.com/AI-Planning/planutils) tool was used because it provides the user with a wide variety of planners that are easily installable and ready to use.
+For solutions to Problems 1, 2, and 4, [Planutils](https://github.com/AI-Planning/planutils) tool was used because it provides the user with a wide variety of planners that are easily installable and ready to use.
 
 In solving problem 3, [PANDA](https://www.uni-ulm.de/en/in/ki/research/software/panda/panda-planning-system/) was used, a planner mainly developed in Java for which it is necessary to install the [Java Virtual Machine](https://www.java.com/en/download/manual.jsp).
 
-Finally, to address problem 5, [PlanSys2](https://github.com/PlanSys2/ros2_planning_system) along with [ROS2](https://docs.ros.org/en/humble/), were required.
+Finally, to address problem 5, [PlanSys2](https://github.com/PlanSys2/ros2_planning_system) along with [ROS2](https://docs.ros.org/en/humble/) were required.
 
 For correct installation and configuration of the tools, please refer to the official documentation.
 
 The project was developed and tested on `Ubuntu 20.04 LTS` and `Ubuntu 22.04 LTS`. However, with appropriate adjustments, it is possible to use the proposed solutions on other operating systems and/or planning systems.
 
-Inside the `Results.md`` file for each problem, it is possible to find instructions for executing the proposed solutions.
+Inside the `Results.md` files of each problem, it is possible to find instructions for executing the proposed solutions.
 
 More details about the development of the project can be found in the [Report]().
