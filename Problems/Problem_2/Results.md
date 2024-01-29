@@ -28,7 +28,7 @@
 
 ## Solutions
 
-### Classical
+### Classic
 
 #### LAMA-First
 
