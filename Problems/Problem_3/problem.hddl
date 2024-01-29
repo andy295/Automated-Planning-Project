@@ -2,7 +2,9 @@
 	(:domain industrial_manufacturing)
 
 	(:objects
-		location1 location2 location3 - location
+		;  because PANDA doesn't support constants
+		;  warehouse was instantiated here as all the other locations 
+		warehouse location1 location2 location3 - location
 
 		work_station1 work_station2 work_station3 - work_station
 
@@ -17,15 +19,15 @@
 		bolt1 bolt2 - bolt
 		tool1 tool2 - tool
 
-		n0 n1 n2 n3 n4 - quantity
+		n0 n1 n2 n3 - quantity
 	)
 
 	(:htn
-		:parameters ()
+		:parameters (?t - tool ?v - valve ?b - bolt)
 		:subtasks (and
-			(task0 (t_deliver_supply valve1 work_station1))
-			(task1 (t_deliver_supply tool1 work_station3))
-			(task2 (t_deliver_supply bolt1 work_station3))
+			(task0 (t_deliver_supply ?v work_station1))
+			(task1 (t_deliver_supply ?t work_station3))
+			(task2 (t_deliver_supply ?b work_station3))
 		)
 		; :ordering (and
 		; 	(task0 < task1)
@@ -42,6 +44,8 @@
 		(adjacent location2 warehouse)
 		(adjacent location2 location1)
 		(adjacent location2 location3)
+
+		(is_warehouse warehouse)
 
 		; work stations
 		(at work_station1 location1)

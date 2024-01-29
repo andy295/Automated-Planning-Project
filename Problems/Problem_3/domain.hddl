@@ -3,7 +3,6 @@
 		:adl
 		:negative-preconditions
 		:conditional-effects
-		:existential-preconditions
 		:universal-preconditions
 		:derived-predicates
 		:typing
@@ -17,10 +16,6 @@
 		robotic_agent container - resizable
 		box carrier - container
 		amr drone - robotic_agent
-	)
-
-	(:constants
-		warehouse - location
 	)
 
 	(:predicates
@@ -51,6 +46,10 @@
 		(decreased_by_1 ?q1 - quantity ?q2 - quantity)
 
 		(delivered ?s - supply ?ws - work_station)
+
+		; to mark the warehouse as a special location
+		; we introduced this predicate
+		(is_warehouse ?l - location)
 	)
 	
 	; ############################# TASKS #############################
@@ -259,6 +258,17 @@
 			(adjacent ?from ?to)
 			(at ?r ?from)
 			(attached ?r ?c)
+
+			; move back to warehouse only if the carrier is empty
+			(or
+				(and 
+					(not (is_warehouse ?to))
+				)
+				(and
+					(is_warehouse ?to)
+					(empty ?c)
+				)
+			)
 		)
 
 		:effect (and
@@ -456,7 +466,6 @@
 			(empty ?b)
 			(not (filled ?b ?s))
 			(at ?s ?l)
-			(not (locked_supply ?s))
 		)
 	)
 )
