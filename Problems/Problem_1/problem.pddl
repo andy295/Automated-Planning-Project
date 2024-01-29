@@ -4,7 +4,7 @@
 	(:objects 
 		location1 location2 location3 - location
 
-		work_station1 work_station2 work_station3 work_station4 - work_station
+		work_station1 work_station2 work_station3 - work_station
 
 		; at this stage of the project one box is enough
 		; because we have just one robot and we assume 
@@ -31,6 +31,7 @@
 		; work stations
 		(at work_station1 location1)
 		(at work_station2 location3)
+		(at work_station3 location3)
 
 		; boxes
 		(at box1 warehouse)
