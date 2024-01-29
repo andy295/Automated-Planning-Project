@@ -67,7 +67,7 @@
 	)
 
 	; Puts down the loaded box
-	(:action free_robot
+	(:action empty_robot
 		:parameters (?r - robotic_agent ?b - box ?l - location)
 		:precondition (and
 			(at ?r ?l) 
