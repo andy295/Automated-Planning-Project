@@ -36,6 +36,10 @@
 
 		(delivered ?s - supply ?ws - work_station)
 		(availiable ?r - robotic_agent)
+
+		; we use it to generalize the delivery of tools
+		; we need it because OPTIC doesn't support existential-preconditions
+		(delivered_tool ?ws - work_station)
 	)
 
 	(:functions
@@ -237,7 +241,33 @@
 			(at end (empty ?b))
 			(at end (availiable ?r))
 			(at end (at_l ?s ?l))
-			(at end (not (locked ?s)))
+		)
+	)
+
+	; Deliveries a tool to a specific work station
+	; we need it because OPTIC doesn't support existential-preconditions
+	(:durative-action deliver_tool
+		:parameters (?r - robotic_agent ?c - carrier ?b - box ?t - tool ?ws - work_station ?l - location)
+		:duration (= ?duration 2)
+		:condition (and
+			(over all (at_l ?ws ?l))
+			(over all (at_l ?r ?l))
+			(over all (attached ?r ?c))
+			(over all (loaded ?c ?b))
+
+			(at start (filled ?b ?t))
+			(at start (availiable ?r))
+		)
+
+		:effect (and
+			(at start (not (filled ?b ?t)))
+			(at start (increase (delivered_supply ?r) 1))
+			(at start (not (availiable ?r)))
+
+			(at end (delivered_tool ?ws))
+			(at end (empty ?b))
+			(at end (availiable ?r))
+			(at end (at_l ?t ?l))
 		)
 	)
 )

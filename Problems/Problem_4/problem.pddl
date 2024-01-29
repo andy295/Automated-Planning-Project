@@ -6,15 +6,15 @@
 
 		work_station1 work_station2 work_station3 - work_station
 
-		box1 box2 box3 box4 box5 - box
+		box1 box2 box3 box4 - box
 
 		drone1 - drone
 		amr1 - amr
 
 		carrier1 carrier2 - carrier
 
-		valve1 valve2 - valve
-		bolt1 bolt2 - bolt
+		valve1 - valve
+		bolt1 - bolt
 		tool1 tool2 - tool
 	)
 
@@ -50,10 +50,6 @@
 		(not_locked box4)
 		(empty box4)
 
-		(at_l box5 warehouse)
-		(not_locked box5)
-		(empty box5)
-
 		;robots
 		(at_l amr1 warehouse)
 		(detached amr1)
@@ -71,7 +67,7 @@
 		(at_l carrier1 warehouse)
 		(not_locked carrier1)
 		(= (loaded_volume carrier1) 0)
-		(= (max_capacity carrier1) 4)
+		(= (max_capacity carrier1) 3)
 		(= (carrying_requirements carrier1) 8)
 
 		(at_l carrier2 warehouse)
@@ -84,14 +80,8 @@
 		(at_l valve1 warehouse)
 		(not_locked valve1)
 
-		(at_l valve2 warehouse)
-		(not_locked valve2)
-
 		(at_l bolt1 warehouse)
 		(not_locked bolt1)
-
-		(at_l bolt2 warehouse)
-		(not_locked bolt2)
 
 		(at_l tool1 warehouse)
 		(not_locked tool1)
@@ -101,9 +91,10 @@
 	)
 
 	(:goal (and
-			(delivered valve1 work_station1)
-			(delivered tool1 work_station3)
-			(delivered bolt1 work_station3)
+			(delivered bolt1 work_station1)
+			(delivered_tool work_station1)
+			(delivered_tool work_station3)
+			(delivered valve1 work_station3)
 		)
 	)
 
