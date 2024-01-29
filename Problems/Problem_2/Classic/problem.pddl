@@ -17,7 +17,7 @@
 		bolt1 bolt2 - bolt
 		tool1 tool2 - tool
 
-		n0 n1 n2 n3 n4 - quantity
+		n0 n1 n2 n3 - quantity
 	)
 
 	(:init
@@ -100,6 +100,6 @@
 	(:goal (and
 		(exists (?v - valve) (delivered ?v work_station1))
 		(exists (?b - bolt) (delivered ?b work_station3))
-		(exists (?b - bolt) (delivered ?b work_station3))
+		(exists (?b - tool) (delivered ?b work_station3))
 	))
 )
