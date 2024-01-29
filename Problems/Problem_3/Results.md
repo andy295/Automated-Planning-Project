@@ -2,7 +2,7 @@
 
 ## Commands
 1. Planner: PANDA-First
-	- ``java -jar PANDA.jar -parser hddl domain.pddl problem_<version>.pddl``
+	- ``java -jar PANDA.jar -parser hddl domain.pddl problem.pddl``
 
 ## Solution
 
