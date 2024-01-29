@@ -49,7 +49,7 @@
 	)
 
 	; Picks up a specific unloaded box
-	(:action Load_robot
+	(:action load_robot
 		:parameters (?r - robotic_agent ?b - box ?l - location)
 		:precondition (and
 			(at ?r ?l)
