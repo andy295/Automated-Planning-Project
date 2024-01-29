@@ -72,7 +72,7 @@
 		(at carrier1 warehouse)
 		(not_locked carrier1)
 		(= (loaded_volume carrier1) 0)
-		(= (max_capacity carrier1) 4)
+		(= (max_capacity carrier1) 3)
 		(= (carrying_requirements carrier1) 8)
 
 		(at carrier2 warehouse)
@@ -103,8 +103,9 @@
 
 	(:goal (and
 			(exists (?v - valve) (delivered ?v work_station1))
+			(exists (?v - tool) (delivered ?v work_station1))
 			(exists (?b - bolt) (delivered ?b work_station2))
-			(exists (?b - bolt) (delivered ?b work_station3))
+			(exists (?b - tool) (delivered ?b work_station3))
 		)
 	)
 
