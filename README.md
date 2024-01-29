@@ -129,4 +129,4 @@ The project was developed and tested on `Ubuntu 20.04 LTS` and `Ubuntu 22.04 LTS
 
 Inside the `Results.md` files of each problem, it is possible to find instructions for executing the proposed solutions.
 
-More details about the development of the project can be found in the [Report]().
+More details about the development of the project can be found in the [Report](https://github.com/andy295/Automated-Planning-Project/blob/main/Report.pdf).
