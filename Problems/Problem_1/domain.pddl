@@ -134,7 +134,6 @@
 			(empty ?b)
 			(not (full ?b ?s))
 			(at ?s ?l)
-			(not (locked ?s))
 		)
 	)
 )

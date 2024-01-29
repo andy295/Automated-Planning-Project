@@ -272,7 +272,6 @@
 			(empty ?b)
 			(not (filled ?b ?s))
 			(at ?s ?l)
-			(not (locked ?s))
 		)
 	)
 )

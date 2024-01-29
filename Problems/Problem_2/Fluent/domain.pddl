@@ -218,7 +218,6 @@
 			(empty ?b)
 			(not (filled ?b ?s))
 			(at ?s ?l)
-			(not (locked ?s))
 
 			(increase (delivered_supply ?r) 1)
 		)
