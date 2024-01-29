@@ -22,6 +22,9 @@ ament_target_dependencies(attach_carrier_action_node ${dependencies})
 add_executable(deliver_supply_action_node src/deliver_supply_action_node.cpp)
 ament_target_dependencies(deliver_supply_action_node ${dependencies})
 
+add_executable(deliver_tool_action_node src/deliver_tool_action_node.cpp)
+ament_target_dependencies(deliver_tool_action_node ${dependencies})
+
 add_executable(detach_carrier_action_node src/detach_carrier_action_node.cpp)
 ament_target_dependencies(detach_carrier_action_node ${dependencies})
 
@@ -45,6 +48,7 @@ install(DIRECTORY launch pddl DESTINATION share/${PROJECT_NAME})
 install(TARGETS
 	attach_carrier_action_node
 	deliver_supply_action_node
+	deliver_tool_action_node
 	detach_carrier_action_node
 	empty_box_actione_node
 	empty_carrier_action_node

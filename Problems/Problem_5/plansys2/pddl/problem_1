@@ -78,4 +78,4 @@ set function (= (delivered_supply amr1) 0)
 set function (= (loaded_volume carrier1) 0)
 set function (= (max_capacity carrier1) 3)
 
-set goal (and (delivered valve1 work_station1) (delivered tool1 work_station1) (delivered bolt1 work_station3))
+set goal (and (delivered_tool work_station1) (delivered_tool work_station3) (delivered bolt1 work_station3))

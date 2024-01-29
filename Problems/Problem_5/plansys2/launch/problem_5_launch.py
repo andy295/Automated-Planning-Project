@@ -57,6 +57,14 @@ def generate_launch_description():
 		output='screen',
 		parameters=[])
 
+	deliver_tool_action_node_cmd = Node(
+		package='plansys2',
+		executable='deliver_tool_action_node',
+		name='deliver_tool_action_node',
+		namespace=namespace,
+		output='screen',
+		parameters=[])
+
 	deliver_supply_action_node_cmd = Node(
 		package='plansys2',
 		executable='deliver_supply_action_node',
@@ -123,6 +131,7 @@ def generate_launch_description():
 	ld.add_action(plansys2_cmd)
 
 	ld.add_action(attach_carrier_action_node_cmd)
+	ld.add_action( deliver_tool_action_node_cmd)
 	ld.add_action(deliver_supply_action_node_cmd)
 	ld.add_action(detach_carrier_action_node_cmd)
 	ld.add_action(empty_box_actione_node_cmd)
